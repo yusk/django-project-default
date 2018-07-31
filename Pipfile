@@ -8,6 +8,10 @@ django = "*"
 uwsgi = "*"
 python-dotenv = "*"
 pymysql = "*"
+djangorestframework = "*"
+djangorestframework-jwt = "*"
+django-rest-swagger = "*"
+django-filter = "*"
 
 [dev-packages]
 

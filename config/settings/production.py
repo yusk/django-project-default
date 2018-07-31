@@ -7,6 +7,7 @@ pymysql.install_as_MySQLdb()
 
 DEBUG = False
 SECRET_KEY = os.environ.get('DB_SECRET_KEY')
+JWT_AUTH['JWT_SECRET_KEY'] = SECRET_KEY
 ALLOWED_HOSTS = []
 
 DATABASES = {
