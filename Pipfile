@@ -6,6 +6,8 @@ name = "pypi"
 [packages]
 django = "*"
 uwsgi = "*"
+python-dotenv = "*"
+pymysql = "*"
 
 [dev-packages]
 
