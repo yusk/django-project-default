@@ -2,10 +2,12 @@ import uuid
 
 from django.db import models
 from django.utils import timezone
+from django.conf import settings
 from django.contrib.auth.base_user import (
     AbstractBaseUser, BaseUserManager)
 from django.contrib.auth.models import PermissionsMixin
 from django.core.validators import EmailValidator
+from django.core.mail import send_mail
 
 
 class SoftDeletionQuerySet(models.QuerySet):
@@ -101,3 +103,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     EMAIL_FIELD = 'email'
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name']
+
+    def send_mail(self, subject, content, from_email=settings.EMAIL_HOST_USER, fail_silently=False):
+        send_mail(
+            subject,
+            content,
+            from_email,
+            [self.email],
+            fail_silently=False,
+        )
