@@ -12,6 +12,7 @@ djangorestframework = "*"
 djangorestframework-jwt = "*"
 django-rest-swagger = "*"
 django-filter = "*"
+django-compressor = "*"
 
 [dev-packages]
 
