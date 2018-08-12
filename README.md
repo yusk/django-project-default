@@ -22,7 +22,7 @@ pipenv run python manage.py runserver
 
 ```bash
 http post http://localhost:8000/api/auth/user/ email=test@test.com password=testuser
-
+http post http://localhost:8000/api/auth/dummy/ 
 
 http post http://localhost:8000/api/auth/refresh/ token={token}
 http post http://localhost:8000/api/auth/verify/ token={token}
