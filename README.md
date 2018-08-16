@@ -4,6 +4,7 @@
 
 * python 3.6.x
   * pipenv
+* redis
 
 ## setup
 
