@@ -45,7 +45,7 @@ class SigninView(FormView):
         return super().form_valid(form)
 
 
-class AuthDummyUserView(GenericAPIView):
+class RegisterDummyUserView(GenericAPIView):
     serializer_class = NoneSerializer
     permission_classes = ()
 

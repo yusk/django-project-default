@@ -19,7 +19,7 @@ if settings.DEBUG:
     urlpatterns.extend([
         path('', views.IndexView.as_view(), name='index'),
         path('api/', include(router.urls)),
-        path('api/auth/dummy/', views.AuthDummyUserView.as_view()),
+        path('api/register/dummy/', views.RegisterDummyUserView.as_view()),
         path('api/auth/user/', obtain_jwt_token),
         path('api/auth/refresh/', refresh_jwt_token),
         path('api/auth/verify/', verify_jwt_token),
