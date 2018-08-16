@@ -2,7 +2,10 @@ from django.urls import path, include
 from django.conf import settings
 from django.contrib.auth.views import logout_then_login
 
+from rest_framework.routers import DefaultRouter, APIRootView
+
 from . import views
+
 
 app_name = 'main'
 urlpatterns = []
@@ -14,6 +17,8 @@ if settings.DEBUG:
 
     router = DefaultRouter()
     router.APIRootView = APIRootView
+    router.register('users', views.UserViewSet, base_name='user')
+
     schema_view = get_swagger_view()
 
     urlpatterns.extend([

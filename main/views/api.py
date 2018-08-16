@@ -1,5 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
+from rest_framework.mixins import RetrieveModelMixin
+from rest_framework.viewsets import GenericViewSet
 from rest_framework.schemas import ManualSchema
 from rest_framework.decorators import schema
 from rest_framework_jwt.settings import api_settings
@@ -40,3 +42,8 @@ class UserView(GenericAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
+
+
+class UserViewSet(RetrieveModelMixin, GenericViewSet):
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
