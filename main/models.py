@@ -1,3 +1,4 @@
+import os
 import uuid
 
 from django.db import models
@@ -8,6 +9,10 @@ from django.contrib.auth.base_user import (
 from django.contrib.auth.models import PermissionsMixin
 from django.core.validators import EmailValidator
 from django.core.mail import send_mail
+
+
+def icon_file_path(instance, filename):
+    return "icon/%s%s" % (timezone.now(), os.path.splitext(filename)[1])
 
 
 class SoftDeletionQuerySet(models.QuerySet):
@@ -95,6 +100,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     name = models.CharField(max_length=64, default='guest user')
     email = models.EmailField(max_length=254, unique=True, validators=[EmailValidator])
     password = models.CharField(max_length=254)
+
+    icon = models.ImageField(upload_to=icon_file_path, null=True)
 
     is_staff = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)

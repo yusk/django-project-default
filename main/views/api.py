@@ -1,5 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
+from rest_framework.schemas import ManualSchema
+from rest_framework.decorators import schema
 from rest_framework_jwt.settings import api_settings
 
 from main.models import User
@@ -28,6 +30,7 @@ class RegisterDummyUserView(GenericAPIView):
 class UserView(GenericAPIView):
     serializer_class = UserSerializer
 
+    @schema(ManualSchema(fields=[]))
     def get(self, request):
         serializer = UserSerializer(request.user)
         return Response(serializer.data)

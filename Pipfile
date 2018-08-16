@@ -13,6 +13,7 @@ djangorestframework-jwt = "*"
 django-rest-swagger = "*"
 django-filter = "*"
 django-compressor = "*"
+pillow = "*"
 
 [dev-packages]
 httpie = "*"
