@@ -10,6 +10,8 @@ from django.contrib.auth.models import PermissionsMixin
 from django.core.validators import EmailValidator
 from django.core.mail import send_mail
 
+from main.decorators import delete_previous_file
+
 
 def icon_file_path(instance, filename):
     return "icon/%s%s" % (timezone.now(), os.path.splitext(filename)[1])
@@ -119,3 +121,11 @@ class User(AbstractBaseUser, PermissionsMixin):
             [self.email],
             fail_silently=False,
         )
+
+    @delete_previous_file
+    def save(self, *args, **kwargs):
+        return super().save(*args, **kwargs)
+
+    @delete_previous_file
+    def delete(self, *args, **kwargs):
+        return super().delete(*args, **kwargs)
