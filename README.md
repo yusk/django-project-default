@@ -18,6 +18,19 @@ pipenv run python manage.py migrate
 pipenv run python manage.py runserver
 ```
 
+## create user
+
+```bash
+pipenv run python manage.py createsuperuser
+```
+
+## check api schema
+
+```bash
+# after run server
+open localhost:8000/schema/ # need session login
+```
+
 ## httpie
 
 ```bash
