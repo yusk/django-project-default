@@ -16,6 +16,7 @@ django-compressor = "*"
 pillow = "*"
 channels-redis = "*"
 channels = "*"
+markdown = "*"
 
 [dev-packages]
 httpie = "*"
