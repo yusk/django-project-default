@@ -8,14 +8,6 @@ from rest_framework import serializers
 from main.models import User
 
 
-class NoneSerializer(serializers.Serializer):
-    pass
-
-
-class TokenOutputSerializer(serializers.Serializer):
-    token = serializers.CharField()
-
-
 class UserSerializer(serializers.ModelSerializer):
     icon_base64 = serializers.CharField(write_only=True)
     icon_url = serializers.SerializerMethodField(read_only=True)
