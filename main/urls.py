@@ -16,8 +16,10 @@ app_name = 'main'
 urlpatterns = [
     path('', views.IndexView.as_view(), name='index'),
     path('api/', include(router.urls)),
+    path('api/register/uuid/', views.RegisterUUIDView.as_view()),
     path('api/auth/refresh/', refresh_jwt_token),
     path('api/auth/verify/', verify_jwt_token),
+    path('api/auth/uuid/', views.AuthUUIDView.as_view()),
     path('api/user/', views.UserView.as_view()),
     path('signup/', views.SignupView.as_view(), name='signup'),
     path('signin/', views.SigninView.as_view(), name='signin'),

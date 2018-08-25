@@ -60,6 +60,7 @@ class User(DeletePreviousFileMixin, PermissionsMixin, AbstractBaseUser):
     password = models.CharField(max_length=254)
 
     icon = models.ImageField(upload_to=icon_file_path, null=True)
+    device_uuid = models.UUIDField(default=uuid.uuid4)
 
     is_staff = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
