@@ -7,7 +7,6 @@
   <title>Django Project Default</title>
   {% compress css %}
   <link rel="stylesheet" href="{% static 'main/css/base/bootstrap.min.css' %}">
-  <link rel="stylesheet" href="{% static 'main/css/common/main.css' %}">
   {% block additional_css %}
     {{ additional_css }}
   {% endblock %}
@@ -52,7 +51,6 @@
   {% compress js %}
   <script src="{% static 'main/js/base/jquery.min.js' %}"></script>
   <script src="{% static 'main/js/base/bootstrap.min.js' %}"></script>
-  <script src="{% static 'main/js/common/main.js' %}"></script>
   {% block additional_js %}
     {{ additional_js }}
   {% endblock %}
