@@ -1,8 +1,3 @@
-import os
-import base64
-
-from django.conf import settings
-from django.utils import timezone
 from rest_framework import serializers
 
 from main.models import User
@@ -23,14 +18,7 @@ class UserSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         if 'icon_base64' in validated_data:
             icon_base64 = validated_data.pop('icon_base64')
-            tmp_path = os.path.join(
-                settings.STATIC_ROOT,
-                "%s.jpg" % timezone.now()
-            )
-            with open(tmp_path, 'wb') as f:
-                f.write(base64.b64decode(icon_base64.encode()))
-            with open(tmp_path, 'rb') as f:
-                instance.icon.save(tmp_path, f)
+            instance.save_icon_with_base64(icon_base64)
         return super().update(instance, validated_data)
 
     def get_icon_url(self, obj):

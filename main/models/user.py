@@ -1,9 +1,10 @@
 import os
 import uuid
+import base64
 
 from django.db import models
-from django.utils import timezone
 from django.conf import settings
+from django.utils import timezone
 from django.contrib.auth.base_user import (
     AbstractBaseUser, BaseUserManager)
 from django.contrib.auth.models import PermissionsMixin
@@ -76,3 +77,14 @@ class User(DeletePreviousFileMixin, PermissionsMixin, AbstractBaseUser):
             [self.email],
             fail_silently=False,
         )
+
+    def save_icon_with_base64(self, base64_str):
+        tmp_path = os.path.join(
+            settings.STATIC_ROOT,
+            "%s.jpg" % timezone.now()
+        )
+        with open(tmp_path, 'wb') as f:
+            f.write(base64.b64decode(base64_str.encode()))
+        with open(tmp_path, 'rb') as f:
+            self.icon.save(tmp_path, f)
+        os.remove(tmp_path)
