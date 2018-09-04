@@ -17,6 +17,7 @@ pillow = "*"
 channels-redis = "*"
 channels = "*"
 markdown = "*"
+daphne = "*"
 
 [dev-packages]
 httpie = "*"
