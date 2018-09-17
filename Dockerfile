@@ -16,6 +16,8 @@ RUN pip install pipenv
 
 ADD Pipfile /var/www/html/
 ADD Pipfile.lock /var/www/html/
-RUN pipenv run pipenv install
+RUN pipenv lock -r > requirements.txt
+RUN pip install -r requirements.txt
+RUN rm requirements.txt
 
 ADD . /var/www/html/
