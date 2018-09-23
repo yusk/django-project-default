@@ -16,11 +16,12 @@ django-compressor = "*"
 pillow = "*"
 channels-redis = "*"
 channels = "*"
-markdown = "*"
+markdown = "<3.0"
 daphne = "*"
 
 [dev-packages]
 httpie = "*"
+"flake8" = "*"
 
 [requires]
 python_version = "3.6"
