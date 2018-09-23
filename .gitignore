@@ -208,3 +208,4 @@ local/
 media/
 redis-data/
 mysql-data/
+.vscode/
