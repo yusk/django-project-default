@@ -22,6 +22,8 @@ daphne = "*"
 [dev-packages]
 httpie = "*"
 "flake8" = "*"
+pylint = "*"
+yapf = "*"
 
 [requires]
 python_version = "3.6"
