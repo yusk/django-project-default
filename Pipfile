@@ -22,7 +22,6 @@ daphne = "*"
 [dev-packages]
 httpie = "*"
 "flake8" = "*"
-pylint = "*"
 yapf = "*"
 
 [requires]

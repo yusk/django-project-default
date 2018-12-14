@@ -11,7 +11,6 @@ router = DefaultRouter()
 router.APIRootView = APIRootView
 router.register('users', views.UserViewSet, base_name='user')
 
-
 app_name = 'main'
 urlpatterns = [
     path('', views.IndexView.as_view(), name='index'),
