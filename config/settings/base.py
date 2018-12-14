@@ -20,9 +20,9 @@ sys.stderr = os.fdopen(sys.stderr.fileno(), 'w', buffering=1)
 sys.stdin = os.fdopen(sys.stdin.fileno(), 'r', buffering=1)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+BASE_DIR = os.path.dirname(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 load_dotenv(os.path.join(BASE_DIR, '.env'))
-
 
 # Application definition
 
@@ -74,51 +74,60 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
+    'DEFAULT_PERMISSION_CLASSES':
+    ('rest_framework.permissions.IsAuthenticated', ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ),
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 100,
-    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',)
+    'DEFAULT_PAGINATION_CLASS':
+    'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE':
+    100,
+    'DEFAULT_FILTER_BACKENDS':
+    ('django_filters.rest_framework.DjangoFilterBackend', )
 }
 
 JWT_AUTH = {
     'JWT_ENCODE_HANDLER':
     'rest_framework_jwt.utils.jwt_encode_handler',
-
     'JWT_DECODE_HANDLER':
     'rest_framework_jwt.utils.jwt_decode_handler',
-
     'JWT_PAYLOAD_HANDLER':
     'rest_framework_jwt.utils.jwt_payload_handler',
-
     'JWT_PAYLOAD_GET_USER_ID_HANDLER':
     'rest_framework_jwt.utils.jwt_get_user_id_from_payload_handler',
-
     'JWT_RESPONSE_PAYLOAD_HANDLER':
     'rest_framework_jwt.utils.jwt_response_payload_handler',
-
-    'JWT_GET_USER_SECRET_KEY': None,
-    'JWT_PUBLIC_KEY': None,
-    'JWT_PRIVATE_KEY': None,
-    'JWT_ALGORITHM': 'HS256',
-    'JWT_VERIFY': True,
-    'JWT_VERIFY_EXPIRATION': True,
-    'JWT_LEEWAY': 0,
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
-    'JWT_AUDIENCE': None,
-    'JWT_ISSUER': None,
-
-    'JWT_ALLOW_REFRESH': True,
-    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=7),
-
-    'JWT_AUTH_HEADER_PREFIX': 'JWT',
-    'JWT_AUTH_COOKIE': None,
+    'JWT_GET_USER_SECRET_KEY':
+    None,
+    'JWT_PUBLIC_KEY':
+    None,
+    'JWT_PRIVATE_KEY':
+    None,
+    'JWT_ALGORITHM':
+    'HS256',
+    'JWT_VERIFY':
+    True,
+    'JWT_VERIFY_EXPIRATION':
+    True,
+    'JWT_LEEWAY':
+    0,
+    'JWT_EXPIRATION_DELTA':
+    datetime.timedelta(days=1),
+    'JWT_AUDIENCE':
+    None,
+    'JWT_ISSUER':
+    None,
+    'JWT_ALLOW_REFRESH':
+    True,
+    'JWT_REFRESH_EXPIRATION_DELTA':
+    datetime.timedelta(days=7),
+    'JWT_AUTH_HEADER_PREFIX':
+    'JWT',
+    'JWT_AUTH_COOKIE':
+    None,
 }
 
 # Password validation
@@ -126,19 +135,22 @@ JWT_AUTH = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
@@ -152,7 +164,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
@@ -210,10 +221,15 @@ LOGGING = {
             'class': 'logging.StreamHandler',
         },
         'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
+            'level':
+            'DEBUG',
+            'class':
+            'logging.FileHandler',
             'filters': ['require_debug_false'],
-            'filename': os.path.join(os.path.join(BASE_DIR, 'log'), '%s.log' % datetime.datetime.now().strftime("%Y%m%d")),
+            'filename':
+            os.path.join(
+                os.path.join(BASE_DIR, 'log'),
+                '%s.log' % datetime.datetime.now().strftime("%Y%m%d")),
         },
     },
     'loggers': {
@@ -227,3 +243,7 @@ LOGGING = {
         },
     },
 }
+
+# CERT
+CERT_ROOT = os.path.join(BASE_DIR, '.well-known')
+CERT_URL = '/.well-known/'
