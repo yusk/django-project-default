@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'compressor',
     'rest_framework',
     'rest_framework_swagger',
+    'corsheaders',
     'main',
 ]
 
@@ -48,6 +49,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'config.middleware.RequestHandleMiddleware',
 ]
 
@@ -247,3 +249,11 @@ LOGGING = {
 # CERT
 CERT_ROOT = os.path.join(BASE_DIR, '.well-known')
 CERT_URL = '/.well-known/'
+
+# CORS
+CORS_ORIGIN_WHITELIST = (
+    'localhost:3000/',
+    'localhost:3000',
+    '127.0.0.1:3000/',
+    '127.0.0.1:3000',
+)

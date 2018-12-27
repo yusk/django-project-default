@@ -18,6 +18,7 @@ channels-redis = "*"
 channels = "*"
 markdown = "<3.0"
 daphne = "*"
+django-cors-headers = "*"
 
 [dev-packages]
 httpie = "*"
