@@ -1,0 +1,11 @@
+{% extends "main/base/base.html" %}
+
+{% block content %}
+<h1>Profile</h1>
+<p>{{ logined_user.name }}</p>
+<p>{{ logined_user.email }}</p>
+{% for address in logined_user.get_addresses %}
+<p>{{ address }}</p>
+{% endfor %}
+<a href="{% url 'main:profile_edit' %}">edit</a>
+{% endblock content %}

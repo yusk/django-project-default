@@ -2,23 +2,25 @@ from django.forms import Form
 from django.forms.fields import EmailField, CharField
 from django.forms.widgets import TextInput, PasswordInput
 
-from main.forms import BootstrapFormMixin
 from main.models import User
+
+from .base import BootstrapFormMixin
 
 
 class SignupForm(BootstrapFormMixin, Form):
     name = CharField(
-        max_length=256, required=True,
-        widget=TextInput(
-            attrs={'placeholder': 'ユーザーネーム'}))
+        max_length=256,
+        required=True,
+        widget=TextInput(attrs={'placeholder': 'ユーザーネーム'}))
     email = EmailField(
-        max_length=256, required=True,
-        widget=TextInput(
-            attrs={'placeholder': 'メールアドレス'}))
+        max_length=256,
+        required=True,
+        widget=TextInput(attrs={'placeholder': 'メールアドレス'}))
     password = CharField(
-        min_length=8, max_length=256, required=True,
-        widget=PasswordInput(
-            attrs={'placeholder': 'パスワード(8文字以上)'}))
+        min_length=8,
+        max_length=256,
+        required=True,
+        widget=PasswordInput(attrs={'placeholder': 'パスワード(8文字以上)'}))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -23,6 +23,8 @@ urlpatterns = [
     path('signup/', views.SignupView.as_view(), name='signup'),
     path('signin/', views.SigninView.as_view(), name='signin'),
     path('signout/', logout_then_login, name='signout'),
+    path('profile/', views.UserDetailView.as_view(), name='profile_detail'),
+    path('profile/edit/', views.UserFormView.as_view(), name='profile_edit'),
 ]
 
 if settings.DEBUG:

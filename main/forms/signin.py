@@ -3,19 +3,20 @@ from django.forms.fields import EmailField, CharField
 from django.forms.widgets import TextInput, PasswordInput
 from django.contrib.auth import authenticate
 
-from main.forms import BootstrapFormMixin
 from main.models import User
+
+from .base import BootstrapFormMixin
 
 
 class SigninForm(BootstrapFormMixin, Form):
     email = EmailField(
-        max_length=256, required=True,
-        widget=TextInput(
-            attrs={'placeholder': 'メールアドレス'}))
+        max_length=256,
+        required=True,
+        widget=TextInput(attrs={'placeholder': 'メールアドレス'}))
     password = CharField(
-        max_length=256, required=True,
-        widget=PasswordInput(
-            attrs={'placeholder': 'パスワード'}))
+        max_length=256,
+        required=True,
+        widget=PasswordInput(attrs={'placeholder': 'パスワード'}))
 
     def clean_email(self):
         email = self.cleaned_data['email']
@@ -26,8 +27,7 @@ class SigninForm(BootstrapFormMixin, Form):
     def get_authenticated_user(self):
         user = authenticate(
             username=self.cleaned_data['email'],
-            password=self.cleaned_data['password']
-        )
+            password=self.cleaned_data['password'])
         if user is None:
             self.add_error('password', 'メールアドレスかパスワードが正しくありません。')
         return user
