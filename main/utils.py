@@ -1,3 +1,6 @@
+import uuid
+from datetime import date, datetime
+
 from django.db import models
 from django.contrib import admin
 
@@ -30,3 +33,11 @@ def create_admin(cls):
 
 def register_admin(cls):
     admin.site.register(cls, create_admin(cls))
+
+
+def json_serial(obj):
+    if isinstance(obj, (datetime, date)):
+        return obj.isoformat()
+    elif isinstance(obj, (uuid.UUID)):
+        return str(obj)
+    raise TypeError("Type %s not serializable" % type(obj))

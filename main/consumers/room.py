@@ -1,9 +1,11 @@
 import json
 import traceback
-from asgiref.sync import AsyncToSync
+# from asgiref.sync import AsyncToSync
 
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 # from channels.db import database_sync_to_async
+
+from main.utils import json_serial
 
 
 class RoomConsumer(AsyncJsonWebsocketConsumer):
@@ -21,10 +23,7 @@ class RoomConsumer(AsyncJsonWebsocketConsumer):
             return
 
         room_name = "room_%s" % room_id
-        await self.channel_layer.group_add(
-            room_name,
-            self.channel_name
-        )
+        await self.channel_layer.group_add(room_name, self.channel_name)
 
         self.user = user
         self.room_name = room_name
@@ -33,19 +32,18 @@ class RoomConsumer(AsyncJsonWebsocketConsumer):
 
     async def disconnect(self, close_code):
         if self.room_name:
-            await self.channel_layer.group_discard(
-                self.room_name,
-                self.channel_name
-            )
+            await self.channel_layer.group_discard(self.room_name,
+                                                   self.channel_name)
 
     async def receive(self, text_data=None, bytes_data=None):
         await self.channel_layer.group_send(
-            self.room_name,
-            {
+            self.room_name, {
                 'type': 'room_message',
-                'message': text_data
-            }
-        )
+                'message': json.dumps({
+                    "content": text_data
+                },
+                                      default=json_serial)
+            })
 
     async def room_message(self, event):
         message = event['message']
