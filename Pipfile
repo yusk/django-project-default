@@ -19,6 +19,8 @@ channels = "*"
 markdown = "*"
 daphne = "*"
 django-cors-headers = "*"
+django-sass-processor = "*"
+libsass = "*"
 
 [dev-packages]
 httpie = "*"

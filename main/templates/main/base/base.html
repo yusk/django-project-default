@@ -1,5 +1,6 @@
 {% load static %}
 {% load compress %}
+{% load sass_tags %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,7 +8,7 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
   {% compress css %}
   <link rel="stylesheet" href="{% static 'main/css/base/bootstrap.min.css' %}">
-  <link rel="stylesheet" href="{% static 'main/css/base.css' %}">
+  <link rel="stylesheet" href="{% sass_src 'main/css/base.scss' %}">
   {% block additional_css %}
     {{ additional_css }}
   {% endblock %}
