@@ -1,4 +1,4 @@
-# Django Project Default
+# README
 
 ## env
 
