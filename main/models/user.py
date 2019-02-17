@@ -5,13 +5,12 @@ import base64
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
-from django.contrib.auth.base_user import (
-    AbstractBaseUser, BaseUserManager)
+from django.contrib.auth.base_user import (AbstractBaseUser, BaseUserManager)
 from django.contrib.auth.models import PermissionsMixin
 from django.core.validators import EmailValidator
 from django.core.mail import send_mail
 
-from main.models import DeletePreviousFileMixin
+from main.models.base import DeletePreviousFileMixin
 
 
 def icon_file_path(instance, filename):
@@ -56,7 +55,8 @@ class UserManager(BaseUserManager):
 class User(DeletePreviousFileMixin, PermissionsMixin, AbstractBaseUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     name = models.CharField(max_length=64, default='guest user')
-    email = models.EmailField(max_length=254, unique=True, validators=[EmailValidator])
+    email = models.EmailField(
+        max_length=254, unique=True, validators=[EmailValidator])
     password = models.CharField(max_length=254)
 
     icon = models.ImageField(upload_to=icon_file_path, null=True)
@@ -70,7 +70,11 @@ class User(DeletePreviousFileMixin, PermissionsMixin, AbstractBaseUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name']
 
-    def send_mail(self, subject, content, from_email=settings.EMAIL_HOST_USER, fail_silently=False):
+    def send_mail(self,
+                  subject,
+                  content,
+                  from_email=settings.EMAIL_HOST_USER,
+                  fail_silently=False):
         send_mail(
             subject,
             content,
@@ -80,10 +84,8 @@ class User(DeletePreviousFileMixin, PermissionsMixin, AbstractBaseUser):
         )
 
     def save_icon_with_base64(self, base64_str):
-        tmp_path = os.path.join(
-            settings.STATIC_ROOT,
-            "%s.jpg" % timezone.now()
-        )
+        tmp_path = os.path.join(settings.STATIC_ROOT,
+                                "%s.jpg" % timezone.now())
         with open(tmp_path, 'wb') as f:
             f.write(base64.b64decode(base64_str.encode()))
         with open(tmp_path, 'rb') as f:
