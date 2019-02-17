@@ -9,10 +9,13 @@
   {% compress css %}
   <link rel="stylesheet" href="{% static 'main/css/base/bootstrap.min.css' %}">
   <link rel="stylesheet" href="{% sass_src 'main/css/base.scss' %}">
-  {% block additional_css %}
-    {{ additional_css }}
+  {% block css %}
+    {{ css }}
   {% endblock %}
   {% endcompress %}
+  {% block raw_css %}
+    {{ raw_css }}
+  {% endblock %}
 </head>
 <body>
 
@@ -54,10 +57,13 @@
   <script src="{% static 'main/js/base/jquery.min.js' %}"></script>
   <script src="{% static 'main/js/base/bootstrap.min.js' %}"></script>
   <script src="{% static 'main/js/base/vue.min.js' %}"></script>
-  {% block additional_js %}
-    {{ additional_js }}
+  {% block js %}
+    {{ js }}
   {% endblock %}
   {% endcompress %}
+  {% block raw_js %}
+    {{ raw_js }}
+  {% endblock %}
 
 </body>
 </html>
