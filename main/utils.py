@@ -1,8 +1,12 @@
 import uuid
 from datetime import date, datetime
+import slackweb
 
 from django.db import models
 from django.contrib import admin
+from django.conf import settings
+
+slack = slackweb.Slack(url=settings.SLACK_WEBHOOK_URL)
 
 
 def get_field_names(cls):
@@ -41,3 +45,10 @@ def json_serial(obj):
     elif isinstance(obj, (uuid.UUID)):
         return str(obj)
     raise TypeError("Type %s not serializable" % type(obj))
+
+
+def slack_notify(text):
+    try:
+        slack.notify(text=text)
+    except Exception as e:
+        print(e)

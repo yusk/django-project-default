@@ -16,6 +16,9 @@
   {% block raw_css %}
     {{ raw_css }}
   {% endblock %}
+  {% if not debug and not ignore_google_analytics %}
+  {% include 'main/common/google_analytics.html' %}
+  {% endif %}
 </head>
 <body>
 

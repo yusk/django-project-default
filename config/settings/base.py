@@ -23,6 +23,8 @@ sys.stdin = os.fdopen(sys.stdin.fileno(), 'r', buffering=1)
 BASE_DIR = os.path.dirname(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 load_dotenv(os.path.join(BASE_DIR, '.env'))
+SLACK_WEBHOOK_URL = os.environ.get('SLACK_WEBHOOK_URL')
+IGNORE_GOOGLE_ANALYTICS = bool(os.environ.get('IGNORE_GOOGLE_ANALYTICS'))
 
 # Application definition
 
@@ -63,12 +65,13 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
-                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'config.context_processors.debug',
                 'config.context_processors.is_logined',
                 'config.context_processors.logined_user',
+                'config.context_processors.ignore_google_analytics',
             ],
         },
     },
@@ -266,3 +269,6 @@ CORS_ORIGIN_WHITELIST = (
     '127.0.0.1:3000/',
     '127.0.0.1:3000',
 )
+
+# Compress
+COMPRESS_OFFLINE = True

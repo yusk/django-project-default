@@ -21,6 +21,7 @@ daphne = "*"
 django-cors-headers = "*"
 django-sass-processor = "*"
 libsass = "*"
+slackweb = "*"
 
 [dev-packages]
 httpie = "*"
