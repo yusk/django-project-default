@@ -9,8 +9,12 @@ from django.contrib.auth.base_user import (AbstractBaseUser, BaseUserManager)
 from django.contrib.auth.models import PermissionsMixin
 from django.core.validators import EmailValidator
 from django.core.mail import send_mail
+from rest_framework_jwt.settings import api_settings
 
 from main.models.base import DeletePreviousFileMixin
+
+jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
+jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 
 
 def icon_file_path(instance, filename):
@@ -94,3 +98,7 @@ class User(DeletePreviousFileMixin, PermissionsMixin, AbstractBaseUser):
         with open(tmp_path, 'rb') as f:
             self.icon.save(tmp_path, f)
         os.remove(tmp_path)
+
+    def get_jwt(self):
+        payload = jwt_payload_handler(self)
+        return jwt_encode_handler(payload)
