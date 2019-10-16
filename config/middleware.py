@@ -28,30 +28,46 @@ class TokenAuthMiddleware:
     def __init__(self, inner):
         self.inner = inner
 
+    @staticmethod
+    def get_user_with_jwt(token):
+        try:
+            user_jwt = jwt.decode(
+                token,
+                settings.SECRET_KEY,
+            )
+            return User.objects.get(id=user_jwt['user_id'])
+        except (KeyError, jwt.InvalidSignatureError, jwt.ExpiredSignatureError,
+                jwt.DecodeError):
+            traceback.print_exc()
+        except Exception:
+            traceback.print_exc()
+        return None
+
     def __call__(self, scope):
         headers = dict(scope['headers'])
         auth_header = None
-        if b'authorization' in headers:
+        secweb_header = None
+        if b'sec-websocket-protocol' in headers:
+            secweb_header = headers[b'sec-websocket-protocol'].decode()
+            scope['subprotocol'] = secweb_header
+        elif b'authorization' in headers:
             auth_header = headers[b'authorization'].decode()
-        else:
-            pass
 
+        # Authorization
         if auth_header:
             auth_kind = None
             if len(auth_header.split(' ')) == 2:
                 auth_kind, auth_value = auth_header.split(' ')
             if auth_kind == 'JWT':
-                try:
-                    user_jwt = jwt.decode(
-                        auth_value,
-                        settings.SECRET_KEY,
-                    )
-                    scope['user'] = User.objects.get(
-                        id=user_jwt['user_id']
-                    )
-                except (KeyError, jwt.InvalidSignatureError, jwt.ExpiredSignatureError, jwt.DecodeError):
-                    traceback.print_exc()
-                except Exception:
-                    traceback.print_exc()
+                user = self.get_user_with_jwt(auth_value)
+                if user:
+                    scope['user'] = user
 
+        # Sec-Websocket-Protocol
+        if secweb_header:
+            user = self.get_user_with_jwt(secweb_header)
+            if user:
+                scope['user'] = user
+
+        print("end TokenAuthMiddleware")
         return self.inner(scope)
