@@ -92,7 +92,9 @@ REST_FRAMEWORK = {
     'PAGE_SIZE':
     100,
     'DEFAULT_FILTER_BACKENDS':
-    ('django_filters.rest_framework.DjangoFilterBackend', )
+    ('django_filters.rest_framework.DjangoFilterBackend', ),
+    'DEFAULT_SCHEMA_CLASS':
+    'rest_framework.schemas.coreapi.AutoSchema'
 }
 
 JWT_AUTH = {
