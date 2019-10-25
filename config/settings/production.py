@@ -1,9 +1,6 @@
 import os
-import pymysql
 
 from .base import *
-
-pymysql.install_as_MySQLdb()
 
 DEBUG = False
 SECRET_KEY = os.environ.get('DB_SECRET_KEY')
