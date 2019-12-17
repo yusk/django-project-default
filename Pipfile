@@ -32,3 +32,6 @@ yapf = "*"
 
 [requires]
 python_version = "3.6"
+
+[scripts]
+dev = "python manage.py runserver"
