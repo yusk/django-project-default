@@ -23,6 +23,7 @@ libsass = "*"
 slackweb = "*"
 numpy = "*"
 mysqlclient = "*"
+stripe = "*"
 
 [dev-packages]
 httpie = "*"
