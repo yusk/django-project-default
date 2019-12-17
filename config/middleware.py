@@ -1,8 +1,12 @@
-import jwt
+import json
 import traceback
+
+import jwt
 
 from django.conf import settings
 from django.utils.deprecation import MiddlewareMixin
+
+from rest_framework.utils.serializer_helpers import ReturnDict
 
 from main.models import User
 
@@ -71,3 +75,24 @@ class TokenAuthMiddleware:
 
         print("end TokenAuthMiddleware")
         return self.inner(scope)
+
+
+class JsonErrorMessageMiddleware(MiddlewareMixin):
+    def process_response(self, request, response):
+        try:
+            if response.status_code >= 400:
+                if type(response.data) in [ReturnDict, dict]:
+                    error_messages = []
+                    for k, v in response.data.items():
+                        if type(v) is list:
+                            error_messages.append(f"{v[0]}({k})")
+                        elif k == "detail":
+                            error_messages.append(f"{v}")
+                        else:
+                            error_messages.append(f"{k}: {v}")
+                    response.data["error_messages"] = error_messages
+                response.content = json.dumps(response.data)
+        except Exception:
+            # traceback.print_exc()
+            pass
+        return response
