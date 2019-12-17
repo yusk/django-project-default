@@ -9,7 +9,7 @@ from . import views
 
 router = DefaultRouter()
 router.APIRootView = APIRootView
-router.register('users', views.UserViewSet, base_name='user')
+router.register('users', views.UserViewSet, basename='user')
 
 app_name = 'main'
 urlpatterns = [
