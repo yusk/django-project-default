@@ -6,3 +6,4 @@ from .macpickle import *
 from .mecab import *
 from .singleton import *
 from .slack import *
+from .twitter import *
