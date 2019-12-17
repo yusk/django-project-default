@@ -24,6 +24,9 @@ slackweb = "*"
 numpy = "*"
 mysqlclient = "*"
 stripe = "*"
+mecab-python3 = "*"
+gensim = "*"
+google-cloud-translate = "==1.7.0"
 
 [dev-packages]
 httpie = "*"

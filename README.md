@@ -8,6 +8,20 @@
 
 ## setup
 
+### mac
+
+```bash
+brew install mecab-ipadic
+```
+
+### ubuntu
+
+```bash
+sudo apt install mecab libmecab-dev mecab-ipadic-utf8
+```
+
+### all
+
 ```bash
 pipenv run pipenv install
 pipenv run python manage.py migrate
@@ -57,3 +71,9 @@ npm install -g wscat
 ```bash
 wscat -c localhost:8000/ws/room/test/ -H "Authorization:JWT {token}"
 ```
+
+## use doc2vec
+
+need to set local/wikipedia/{jawiki.doc2vec.dbow300d.model|*.npy}
+
+e.g. from https://yag-ays.github.io/project/pretrained_doc2vec_wikipedia/
