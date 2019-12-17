@@ -31,9 +31,17 @@ class UserAdmin(admin.ModelAdmin):
 
 
 class TweetAdmin(admin.ModelAdmin):
-    list_display = get_field_names(Tweet)
-    search_fields = ['name']
+    # list_display = get_field_names(Tweet)
+    search_fields = ['text']
     filter_horizontal = ('tags', )
+
+    def view_tags(self, obj):
+        return ",".join([tag.name for tag in obj.get_all_tags()])
+
+    def get_list_display(self, request):
+        list_display = get_field_names(Tweet)
+        list_display.extend(["view_tags", "get_tag_count", "get_tag_added_at"])
+        return list_display
 
 
 admin.site.register(User, UserAdmin)
