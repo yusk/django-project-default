@@ -272,3 +272,7 @@ CORS_ORIGIN_WHITELIST = (
 
 # Compress
 COMPRESS_OFFLINE = True
+
+# Stripe
+STRIPE_API_KEY = os.environ.get('STRIPE_API_KEY')
+STRIPE_API_SECRET = os.environ.get('STRIPE_API_SECRET')
