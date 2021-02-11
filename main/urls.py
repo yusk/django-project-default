@@ -19,6 +19,7 @@ urlpatterns = [
     path('api/auth/refresh/', refresh_jwt_token),
     path('api/auth/verify/', verify_jwt_token),
     path('api/auth/uuid/', views.AuthUUIDView.as_view()),
+    path('api/auth/user/', obtain_jwt_token),
     path('api/user/', views.UserView.as_view()),
     path('signup/', views.SignupView.as_view(), name='signup'),
     path('signin/', views.SigninView.as_view(), name='signin'),
@@ -28,12 +29,23 @@ urlpatterns = [
 ]
 
 if settings.DEBUG:
-    from rest_framework_swagger.views import get_swagger_view
+    from rest_framework import permissions
+    from drf_yasg.views import get_schema_view
+    from drf_yasg import openapi
 
-    schema_view = get_swagger_view()
+    schema_view = get_schema_view(
+        openapi.Info(
+            title="API Schema",
+            default_version='v1',
+            description="",
+        ),
+        public=True,
+        permission_classes=[permissions.AllowAny],
+    )
 
     urlpatterns.extend([
         path('api/register/dummy/', views.RegisterDummyUserView.as_view()),
-        path('api/auth/user/', obtain_jwt_token),
-        path('schema/', schema_view),
+        path('schema/',
+             schema_view.with_ui('swagger', cache_timeout=0),
+             name='schema-swagger-ui'),
     ])

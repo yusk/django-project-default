@@ -4,12 +4,11 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django = "==v2.2.8"
+django = "*"
 uwsgi = "*"
 python-dotenv = "*"
 djangorestframework = "*"
 djangorestframework-jwt = "*"
-django-rest-swagger = "*"
 django-filter = "*"
 django-compressor = "*"
 pillow = "*"
@@ -28,6 +27,7 @@ mecab-python3 = "*"
 gensim = "*"
 google-cloud-translate = "==1.7.0"
 requests-oauthlib = "*"
+drf-yasg = "*"
 
 [dev-packages]
 httpie = "*"
@@ -35,7 +35,7 @@ httpie = "*"
 yapf = "*"
 
 [requires]
-python_version = "3.6"
+python_version = "3.8"
 
 [scripts]
 dev = "python manage.py runserver"
