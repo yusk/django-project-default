@@ -1,23 +1,32 @@
-FROM python:3.6.6
+FROM python:3.8-slim as builder
 
-RUN apt update -y
-RUN apt upgrade -y
+WORKDIR /tmp
 
-WORKDIR /var/www/html
+RUN pip install --upgrade pip
+RUN pip install poetry
 
-RUN apt install -y locales locales-all
+COPY pyproject.toml poetry.lock ./
 
-ENV LC_ALL=ja_JP.UTF-8
-ENV LANG=ja_JP.UTF-8
-ENV LANGUAGE=ja_JP.UTF-8
+RUN poetry export --without-hashes -f requirements.txt > requirements.txt
 
-RUN pip install -U pip
-RUN pip install pipenv
 
-ADD Pipfile /var/www/html/
-ADD Pipfile.lock /var/www/html/
-RUN pipenv lock -r > requirements.txt
+FROM python:3.8-slim
+
+ENV PYTHONUNBUFFERED=1
+
+WORKDIR /var/www/html/
+
+COPY --from=builder /tmp/requirements.txt .
+
+RUN apt update
+
+# for mysqlclient
+RUN apt install -y default-libmysqlclient-dev
+
+# for uwsgi
+RUN apt install -y gcc
+
+RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
-RUN rm requirements.txt
 
-ADD . /var/www/html/
+COPY . .

@@ -2,8 +2,8 @@
 
 ## env
 
-* python 3.6.x
-  * pipenv
+* python 3.8.x
+  * poetry
 * redis
 
 ## setup
@@ -23,20 +23,21 @@ sudo apt install mecab libmecab-dev mecab-ipadic-utf8
 ### all
 
 ```bash
-pipenv run pipenv install
-pipenv run python manage.py migrate
+cp .env.sample .env
+poetry run poetry install
+poetry run python manage.py migrate
 ```
 
 ## run
 
 ```bash
-pipenv run python manage.py runserver
+poetry run python manage.py runserver
 ```
 
 ## create user
 
 ```bash
-pipenv run python manage.py createsuperuser
+poetry run python manage.py createsuperuser
 ```
 
 ## check api schema
