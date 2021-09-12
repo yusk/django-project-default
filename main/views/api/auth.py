@@ -2,6 +2,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 from rest_framework_jwt.settings import api_settings
+from django.utils.decorators import method_decorator
+from drf_yasg.utils import swagger_auto_schema
 
 from main.models import User
 from main.serializers import TokenSerializer, UUIDSerializer
@@ -14,6 +16,8 @@ class AuthUUIDView(GenericAPIView):
     serializer_class = UUIDSerializer
     permission_classes = ()
 
+    @method_decorator(
+        decorator=swagger_auto_schema(responses={200: TokenSerializer}))
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -21,9 +25,7 @@ class AuthUUIDView(GenericAPIView):
         user = User.objects.filter(device_uuid=serializer.data['uuid']).first()
 
         if user is None:
-            message = {
-                'detail': 'そのユーザーは存在しません'
-            }
+            message = {'detail': 'そのユーザーは存在しません'}
             return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
         payload = jwt_payload_handler(user)
