@@ -4,6 +4,7 @@ from django.contrib.auth.views import logout_then_login
 
 from rest_framework.routers import DefaultRouter, APIRootView
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify_jwt_token
+from rest_framework_nested.routers import NestedSimpleRouter
 
 from . import views
 
@@ -12,10 +13,14 @@ router.APIRootView = APIRootView
 router.register('users', views.UserViewSet, basename='user')
 router.register('tweets', views.TweetViewSet, basename='tweet')
 
+tweet_router = NestedSimpleRouter(router, "tweets", lookup="tweet")
+tweet_router.register('tags', views.DealViewSet, basename='tweet-tags')
+
 app_name = 'main'
 urlpatterns = [
     path('', views.IndexView.as_view(), name='index'),
     path('api/', include(router.urls)),
+    path('api/', include(tweet_router.urls)),
     path('api/register/uuid/', views.RegisterUUIDView.as_view()),
     path('api/register/user/', views.RegisterUserView.as_view()),
     path('api/auth/refresh/', refresh_jwt_token),
