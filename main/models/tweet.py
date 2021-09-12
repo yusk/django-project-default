@@ -3,16 +3,17 @@ from django.db.models import Max
 
 from .tag import Tag
 
-TWEET_STATUS_CHOICES = ((0, '公開'), (1, '下書き'), (2, '非公開'))
-
 
 class Tweet(models.Model):
-    TWEET_STATUS_CHOICES = TWEET_STATUS_CHOICES
+    class Status(models.TextChoices):
+        PUBLISHED = 0, '公開'
+        DRAFT = 1, '下書き'
+        PRIVATE = 2, '非公開'
 
     user = models.ForeignKey("User", on_delete=models.CASCADE)
     text = models.TextField()
 
-    status = models.IntegerField(choices=TWEET_STATUS_CHOICES, default=0)
+    status = models.IntegerField(choices=Status.choices, default=Status.DRAFT)
     tags = models.ManyToManyField("Tag",
                                   through="TweetTagRelation",
                                   through_fields=("tweet", "tag"),
@@ -57,6 +58,3 @@ class TweetTagRelation(models.Model):
     tag = models.ForeignKey("Tag", on_delete=models.CASCADE)
 
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
-
-    class Meta:
-        auto_created = True

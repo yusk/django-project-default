@@ -10,6 +10,7 @@ from . import views
 router = DefaultRouter()
 router.APIRootView = APIRootView
 router.register('users', views.UserViewSet, basename='user')
+router.register('tweets', views.TweetViewSet, basename='tweet')
 
 app_name = 'main'
 urlpatterns = [

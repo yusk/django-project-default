@@ -1,3 +1,5 @@
+import re
+
 from django.db import models
 
 
@@ -20,3 +22,12 @@ def model_to_dict(obj):
         for item in getattr(obj, name).all():
             res[name].append(model_to_dict(item))
     return res
+
+
+def get_by_manytomany(queryset, name, value, idx):
+    m = list(re.finditer('_', name))
+    i = m[idx].span()[0]
+    model_name = f"{name[0:i]}s"
+    key = name[i + 1:]
+    kwargs = {f"{model_name}__{key}": value}
+    return queryset.filter(**kwargs).distinct()
