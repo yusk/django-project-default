@@ -13,11 +13,11 @@ class Tweet(models.Model):
     text = models.TextField()
 
     status = models.IntegerField(choices=TWEET_STATUS_CHOICES, default=0)
-    tags = models.ManyToManyField(
-        "Tag",
-        through="TweetTagRelation",
-        through_fields=("tweet", "tag"),
-        blank=True)
+    tags = models.ManyToManyField("Tag",
+                                  through="TweetTagRelation",
+                                  through_fields=("tweet", "tag"),
+                                  related_name="tweets",
+                                  blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
 
