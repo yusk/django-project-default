@@ -1,1 +1,1 @@
-from .tweet import *
+from .tweet import TweetSerializer  # noqa

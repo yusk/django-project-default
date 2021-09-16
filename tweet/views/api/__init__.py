@@ -1,2 +1,2 @@
-from .tweet import *
-from .tweet_tag import *
+from .tweet import TweetViewSet  # noqa
+from .tweet_tag import TweetTagViewSet  # noqa

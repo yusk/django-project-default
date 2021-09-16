@@ -1,9 +1,9 @@
-from .djangoutils import *
-from .googleutils import *
-from .doc2vec import *
-from .funcs import *
-from .macpickle import *
-from .mecab import *
-from .singleton import *
-from .slack import *
-from .twitter import *
+from .djangoutils import *  # noqa
+from .googleutils import *  # noqa
+from .doc2vec import cos_similarity, doc2vec  # noqa
+from .funcs import json_serial, get_next_minute_datetime, get_prev_minute_datetime  # noqa
+from .macpickle import pickle_dump, pickle_load  # noqa
+from .mecab import tokenize  # noqa
+from .singleton import Singleton  # noqa
+from .slack import slack_notify  # noqa
+from .twitter import tweet  # noqa

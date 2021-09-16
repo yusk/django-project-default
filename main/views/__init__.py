@@ -1,2 +1,2 @@
-from .api import *
-from .web import *
+from .api import *  # noqa
+from .web import *  # noqa

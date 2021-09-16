@@ -1,1 +1,1 @@
-from .room import *
+from .room import RoomConsumer  # noqa

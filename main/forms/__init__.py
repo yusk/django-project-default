@@ -1,3 +1,3 @@
-from .signin import *
-from .signup import *
-from .user import *
+from .signin import SigninForm  # noqa
+from .signup import SignupForm  # noqa
+from .user import UserForm  # noqa
