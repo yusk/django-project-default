@@ -1,12 +1,15 @@
-from django.utils import timezone
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django_filters import rest_framework as filters
 from drf_yasg.utils import swagger_auto_schema
 
-from main.models import Tweet, Tag
-from main.serializers import TweetSerializer, NoneSerializer, NameSerializer
+from tag.models import Tag
+from tweet.models import Tweet
+from tweet.serializers import TweetSerializer
+
+from main.serializers import NoneSerializer, NameSerializer
+
 from main.utils import get_by_manytomany
 
 

@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'drf_yasg',
     'corsheaders',
     'main',
+    'tag',
+    'tweet',
 ]
 
 MIDDLEWARE = [

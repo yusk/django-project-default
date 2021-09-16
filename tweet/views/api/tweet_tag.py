@@ -6,11 +6,12 @@ from django_filters import rest_framework as filters
 
 from drf_yasg.utils import swagger_auto_schema
 
-from main.models import Tag
+from tag.models import Tag
+
 from main.serializers import NameSerializer, NoneSerializer
 
 
-class DealFilter(filters.FilterSet):
+class TweetTagFilter(filters.FilterSet):
     class Meta:
         model = Tag
         fields = [
@@ -19,12 +20,14 @@ class DealFilter(filters.FilterSet):
         ]
 
 
-class DealViewSet(ReadOnlyModelViewSet):
+class TweetTagViewSet(ReadOnlyModelViewSet):
     serializer_class = NameSerializer
-    queryset = Tag.objects.all()
-    filter_class = DealFilter
+    filter_class = TweetTagFilter
     ordering_fields = ('created_at', )
     ordering = ('created_at', )
+
+    def get_queryset(self):
+        return Tag.objects.filter(tweets=self.kwargs['tweet_pk'])
 
     @swagger_auto_schema(method='get', responses={200: NoneSerializer})
     @action(detail=False, methods=['get'], url_path="count")

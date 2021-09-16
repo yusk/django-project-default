@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models import Max
 
-from .tag import Tag
+from tag.models import Tag
 
 
 class Tweet(models.Model):
@@ -10,11 +10,11 @@ class Tweet(models.Model):
         DRAFT = 1, '下書き'
         PRIVATE = 2, '非公開'
 
-    user = models.ForeignKey("User", on_delete=models.CASCADE)
+    user = models.ForeignKey("main.User", on_delete=models.CASCADE)
     text = models.TextField()
 
     status = models.IntegerField(choices=Status.choices, default=Status.DRAFT)
-    tags = models.ManyToManyField("Tag",
+    tags = models.ManyToManyField("tag.Tag",
                                   through="TweetTagRelation",
                                   through_fields=("tweet", "tag"),
                                   related_name="tweets",
@@ -55,6 +55,6 @@ class Tweet(models.Model):
 
 class TweetTagRelation(models.Model):
     tweet = models.ForeignKey("Tweet", on_delete=models.CASCADE)
-    tag = models.ForeignKey("Tag", on_delete=models.CASCADE)
+    tag = models.ForeignKey("tag.Tag", on_delete=models.CASCADE)
 
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
