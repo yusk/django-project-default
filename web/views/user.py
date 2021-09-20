@@ -1,7 +1,7 @@
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, FormView
 
-from main.forms import UserForm
+from ..forms import UserForm
 
 from .base import OnlyLoginUserMixin
 

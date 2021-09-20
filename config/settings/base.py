@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'corsheaders',
     'main',
+    'web',
     'tag',
     'tweet',
 ]

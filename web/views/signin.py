@@ -2,7 +2,7 @@ from django.urls import reverse_lazy
 from django.views.generic import FormView
 from django.contrib.auth import login
 
-from main.forms import SigninForm
+from ..forms import SigninForm
 
 
 class SigninView(FormView):

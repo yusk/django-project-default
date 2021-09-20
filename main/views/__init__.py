@@ -1,2 +1,3 @@
-from .api import *  # noqa
-from .web import *  # noqa
+from .auth import AuthUUIDView  # noqa
+from .register import RegisterDummyUserView, RegisterUUIDView, RegisterUserView  # noqa
+from .user import UserView, UserViewSet, UserPasswordView  # noqa

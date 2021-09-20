@@ -13,7 +13,6 @@ router.register('users', views.UserViewSet, basename='user')
 
 app_name = 'main'
 urlpatterns = [
-    path('', views.IndexView.as_view(), name='index'),
     path('api/', include(router.urls)),
     path('api/register/uuid/', views.RegisterUUIDView.as_view()),
     path('api/register/user/', views.RegisterUserView.as_view()),
@@ -23,11 +22,6 @@ urlpatterns = [
     path('api/auth/user/', obtain_jwt_token),
     path('api/user/', views.UserView.as_view()),
     path('api/user/password/', views.UserPasswordView.as_view()),
-    path('signup/', views.SignupView.as_view(), name='signup'),
-    path('signin/', views.SigninView.as_view(), name='signin'),
-    path('signout/', logout_then_login, name='signout'),
-    path('profile/', views.UserDetailView.as_view(), name='profile_detail'),
-    path('profile/edit/', views.UserFormView.as_view(), name='profile_edit'),
 ]
 
 if settings.DEBUG:
