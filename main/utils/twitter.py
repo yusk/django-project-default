@@ -1,10 +1,9 @@
 from requests_oauthlib import OAuth1Session
 
-from django.conf import settings
+from main.env import TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_TOKEN_SECRET
 
-twitter = OAuth1Session(
-    settings.TWITTER_CONSUMER_KEY, settings.TWITTER_CONSUMER_SECRET,
-    settings.TWITTER_ACCESS_TOKEN, settings.TWITTER_ACCESS_TOKEN_SECRET)
+twitter = OAuth1Session(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET,
+                        TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_TOKEN_SECRET)
 
 
 def tweet(text, reply_to=None, data={}):

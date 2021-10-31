@@ -1,8 +1,8 @@
 import slackweb
 
-from django.conf import settings
+from main.env import SLACK_WEBHOOK_URL
 
-slack = slackweb.Slack(url=settings.SLACK_WEBHOOK_URL)
+slack = slackweb.Slack(url=SLACK_WEBHOOK_URL)
 
 
 def slack_notify(text):

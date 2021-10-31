@@ -1,8 +1,8 @@
 import stripe
 
-from django.conf import settings
+from main.env import STRIPE_API_SECRET
 
-stripe.api_key = settings.STRIPE_API_SECRET
+stripe.api_key = STRIPE_API_SECRET
 
 
 class StripeWrapper:
@@ -30,13 +30,13 @@ class StripeWrapper:
     def get_invoice_list_by_subscription_id(subscription_id,
                                             limit=10,
                                             starting_after=None):
-        return stripe.Invoice.list(
-            subscription=subscription_id,
-            limit=limit,
-            starting_after=starting_after)
+        return stripe.Invoice.list(subscription=subscription_id,
+                                   limit=limit,
+                                   starting_after=starting_after)
 
     @classmethod
-    def get_all_invoice_list_by_subscription_id(cls, subscription_id,
+    def get_all_invoice_list_by_subscription_id(cls,
+                                                subscription_id,
                                                 limit=10):
         res = []
         invoice_list = cls.get_invoice_list_by_subscription_id(subscription_id)
@@ -62,8 +62,9 @@ class StripeWrapper:
 
     @staticmethod
     def product_list(limit=10, active=True, starting_after=None):
-        return stripe.Product.list(
-            limit=limit, active=True, starting_after=starting_after)
+        return stripe.Product.list(limit=limit,
+                                   active=True,
+                                   starting_after=starting_after)
 
     @classmethod
     def get_product_by_name(cls, name):
@@ -89,8 +90,9 @@ class StripeWrapper:
 
     @staticmethod
     def plan_list(limit=10, active=True, starting_after=None):
-        return stripe.Plan.list(
-            limit=limit, active=active, starting_after=starting_after)
+        return stripe.Plan.list(limit=limit,
+                                active=active,
+                                starting_after=starting_after)
 
     @classmethod
     def get_plan_by_product_id_and_amount(cls, product_id, amount):
@@ -107,13 +109,12 @@ class StripeWrapper:
 
     @staticmethod
     def token_create(number, exp_month, exp_year, cvc):
-        return stripe.Token.create(
-            card={
-                'number': number,
-                'exp_month': exp_month,
-                'exp_year': exp_year,
-                'cvc': cvc,
-            }, )
+        return stripe.Token.create(card={
+            'number': number,
+            'exp_month': exp_month,
+            'exp_year': exp_year,
+            'cvc': cvc,
+        }, )
 
     @staticmethod
     def customer_create(token, description=""):
@@ -146,8 +147,9 @@ class StripeWrapper:
                           **kwargs):
         if status is not None:
             kwargs["status"] = status
-        return stripe.Subscription.list(
-            limit=limit, starting_after=starting_after, **kwargs)
+        return stripe.Subscription.list(limit=limit,
+                                        starting_after=starting_after,
+                                        **kwargs)
 
     @staticmethod
     def subscription_retrieve(id):
@@ -168,8 +170,8 @@ class StripeWrapper:
                 print(subscription.id)
                 if subscription.customer == customer_id and subscription.plan.id == plan_id:
                     return subscription
-            s_list = cls.subscription_list(
-                starting_after=s_list.data[-1].id, status=status)
+            s_list = cls.subscription_list(starting_after=s_list.data[-1].id,
+                                           status=status)
         for subscription in s_list.data:
             print(subscription.id)
             if subscription.customer == customer_id and subscription.plan.id == plan_id:

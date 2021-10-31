@@ -1,19 +1,20 @@
-import os
+from .base import *  # noqa
 
-from .base import *
+from main.env import CORS_ORIGIN_WHITELIST  # noqa
+from main.env import (DB_SECRET_KEY, PRODUCTION_HOST, DB_NAME, DB_USER,
+                      DB_PASSWORD, DB_HOST, DB_PORT)
 
 DEBUG = False
-SECRET_KEY = os.environ.get('DB_SECRET_KEY')
-JWT_AUTH['JWT_SECRET_KEY'] = SECRET_KEY
-ALLOWED_HOSTS = [os.environ.get('PRODUCTION_HOST')]
+JWT_AUTH['JWT_SECRET_KEY'] = DB_SECRET_KEY  # noqa
+ALLOWED_HOSTS = [PRODUCTION_HOST]
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': os.environ.get('DB_HOST'),
-        'PORT': os.environ.get('DB_PORT'),
+        'NAME': DB_NAME,
+        'USER': DB_USER,
+        'PASSWORD': DB_PASSWORD,
+        'HOST': DB_HOST,
+        'PORT': DB_PORT,
     }
 }

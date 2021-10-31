@@ -23,11 +23,8 @@ sys.stdin = os.fdopen(sys.stdin.fileno(), 'r', buffering=1)
 BASE_DIR = os.path.dirname(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 load_dotenv(os.path.join(BASE_DIR, '.env'))
-SLACK_WEBHOOK_URL = os.environ.get('SLACK_WEBHOOK_URL')
-IGNORE_GOOGLE_ANALYTICS = bool(os.environ.get('IGNORE_GOOGLE_ANALYTICS'))
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -188,13 +185,6 @@ SASS_PRECISION = 8
 SASS_OUTPUT_STYLE = 'compact'
 SASS_TEMPLATE_EXTS = ['.html', '.haml']
 
-# Mails
-EMAIL_HOST = os.environ.get('EMAIL_HOST')
-EMAIL_PORT = os.environ.get('EMAIL_PORT')
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
-EMAIL_USE_TLS = bool(os.environ.get('EMAIL_USE_TLS'))
-
 # Channels
 ASGI_APPLICATION = 'config.routing.application'
 CHANNEL_LAYERS = {
@@ -250,21 +240,5 @@ LOGGING = {
 CERT_ROOT = os.path.join(BASE_DIR, '.well-known')
 CERT_URL = '/.well-known/'
 
-# CORS
-CORS_ORIGIN_WHITELIST = (
-    'http://localhost:3000',
-    'http://127.0.0.1:3000',
-)
-
 # Compress
 COMPRESS_OFFLINE = True
-
-# Stripe
-STRIPE_API_KEY = os.environ.get('STRIPE_API_KEY')
-STRIPE_API_SECRET = os.environ.get('STRIPE_API_SECRET')
-
-# Twitter
-TWITTER_CONSUMER_KEY = os.environ.get('TWITTER_CONSUMER_KEY')
-TWITTER_CONSUMER_SECRET = os.environ.get('TWITTER_CONSUMER_SECRET')
-TWITTER_ACCESS_TOKEN = os.environ.get('TWITTER_ACCESS_TOKEN')
-TWITTER_ACCESS_TOKEN_SECRET = os.environ.get('TWITTER_ACCESS_TOKEN_SECRET')
