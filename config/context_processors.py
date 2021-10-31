@@ -1,12 +1,14 @@
 from django.conf import settings
 
+from main.env import IGNORE_GOOGLE_ANALYTICS
+
 
 def debug(request):
     return {"debug": settings.DEBUG}
 
 
 def ignore_google_analytics(request):
-    return {"ignore_google_analytics": settings.IGNORE_GOOGLE_ANALYTICS}
+    return {"ignore_google_analytics": IGNORE_GOOGLE_ANALYTICS}
 
 
 def is_logged_in(request):
