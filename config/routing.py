@@ -4,16 +4,15 @@ from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.auth import AuthMiddlewareStack
 
 from config.middleware import TokenAuthMiddleware
-from main.consumers import RoomConsumer
+from room.consumers import RoomConsumer
 
-
-TokenAuthMiddlewareStack = lambda inner: TokenAuthMiddleware(AuthMiddlewareStack(inner))
-
+TokenAuthMiddlewareStack = lambda inner: TokenAuthMiddleware(
+    AuthMiddlewareStack(inner))
 
 application = ProtocolTypeRouter({
-    "websocket": TokenAuthMiddlewareStack(
+    "websocket":
+    TokenAuthMiddlewareStack(
         URLRouter([
-            path('ws/room/<str:pk>/', RoomConsumer),
-        ])
-    )
+            path('ws/room/<str:pk>/', RoomConsumer.as_asgi()),
+        ]))
 })

@@ -11,11 +11,11 @@ from main.utils import json_serial
 class RoomConsumer(AsyncJsonWebsocketConsumer):
     async def connect(self):
         self.room_name = None
-        if not self.scope['user'].is_authenticated:
+        if not self.scope['logged_in_user'].is_authenticated:
             await self.close()
             return
         try:
-            user = self.scope['user']
+            user = self.scope['logged_in_user']
             room_id = self.scope['url_route']['kwargs']['pk']
         except (KeyError):
             traceback.print_exc()
@@ -39,9 +39,7 @@ class RoomConsumer(AsyncJsonWebsocketConsumer):
         await self.channel_layer.group_send(
             self.room_name, {
                 'type': 'room_message',
-                'message': json.dumps({
-                    "content": text_data
-                },
+                'message': json.dumps({"content": text_data},
                                       default=json_serial)
             })
 

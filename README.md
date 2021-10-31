@@ -60,10 +60,10 @@ python manage.py showmigrations
 http post http://localhost:8000/api/register/dummy/
 http post http://localhost:8000/api/auth/user/ email=test@test.com password=testuser
 
-http post http://localhost:8000/api/auth/refresh/ token={token}
-http post http://localhost:8000/api/auth/verify/ token={token}
+http post http://localhost:8000/api/auth/refresh/ token=$TOKEN
+http post http://localhost:8000/api/auth/verify/ token=$TOKEN
 
-http http://localhost:8000/api/user/ Authorization:"JWT {token}"
+http http://localhost:8000/api/user/ Authorization:"JWT $TOKEN"
 ```
 
 ## wscat
@@ -77,7 +77,7 @@ npm install -g wscat
 ### run
 
 ```bash
-wscat -c localhost:8000/ws/room/test/ -H "Authorization:JWT {token}"
+wscat -c localhost:8000/ws/room/test/ -H "Authorization:JWT $TOKEN"
 ```
 
 ## use doc2vec

@@ -8,6 +8,8 @@ from django.utils.deprecation import MiddlewareMixin
 
 from rest_framework.utils.serializer_helpers import ReturnDict
 
+from channels.db import database_sync_to_async
+
 from main.models import User
 
 
@@ -29,10 +31,11 @@ class RequestHandleMiddleware(MiddlewareMixin):
 
 
 class TokenAuthMiddleware:
-    def __init__(self, inner):
-        self.inner = inner
+    def __init__(self, app):
+        self.app = app
 
     @staticmethod
+    @database_sync_to_async
     def get_user_with_jwt(token):
         try:
             user_jwt = jwt.decode(
@@ -47,7 +50,7 @@ class TokenAuthMiddleware:
             traceback.print_exc()
         return None
 
-    def __call__(self, scope):
+    async def __call__(self, scope, receive, send):
         headers = dict(scope['headers'])
         auth_header = None
         secweb_header = None
@@ -63,18 +66,17 @@ class TokenAuthMiddleware:
             if len(auth_header.split(' ')) == 2:
                 auth_kind, auth_value = auth_header.split(' ')
             if auth_kind == 'JWT':
-                user = self.get_user_with_jwt(auth_value)
+                user = await self.get_user_with_jwt(auth_value)
                 if user:
-                    scope['user'] = user
+                    scope['logged_in_user'] = user
 
         # Sec-Websocket-Protocol
         if secweb_header:
             user = self.get_user_with_jwt(secweb_header)
             if user:
-                scope['user'] = user
+                scope['logged_in_user'] = user
 
-        print("end TokenAuthMiddleware")
-        return self.inner(scope)
+        return await self.app(scope, receive, send)
 
 
 class JsonErrorMessageMiddleware(MiddlewareMixin):
