@@ -12,6 +12,7 @@ from django.core.mail import send_mail
 from rest_framework_jwt.settings import api_settings
 
 from main.models.base import DeletePreviousFileMixin
+from main.env import EMAIL_HOST_USER
 
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
@@ -59,11 +60,10 @@ class UserManager(BaseUserManager):
 class User(DeletePreviousFileMixin, PermissionsMixin, AbstractBaseUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     name = models.CharField(max_length=64, default='guest user')
-    email = models.EmailField(
-        max_length=254,
-        unique=True,
-        validators=[EmailValidator],
-        db_index=True)
+    email = models.EmailField(max_length=254,
+                              unique=True,
+                              validators=[EmailValidator],
+                              db_index=True)
     password = models.CharField(max_length=254)
 
     icon = models.ImageField(upload_to=icon_file_path, null=True, blank=True)
@@ -80,7 +80,7 @@ class User(DeletePreviousFileMixin, PermissionsMixin, AbstractBaseUser):
     def send_mail(self,
                   subject,
                   content,
-                  from_email=settings.EMAIL_HOST_USER,
+                  from_email=EMAIL_HOST_USER,
                   fail_silently=False):
         send_mail(
             subject,
