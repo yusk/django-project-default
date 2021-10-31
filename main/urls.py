@@ -22,6 +22,9 @@ urlpatterns = [
     path('api/auth/user/', obtain_jwt_token),
     path('api/user/', views.UserView.as_view()),
     path('api/user/password/', views.UserPasswordView.as_view()),
+    path('api/password/', views.PasswordResetView.as_view()),
+    path('api/password/email/', views.PasswordResetEmailView.as_view()),
+    path('api/password/digit/', views.PasswordResetDigitView.as_view()),
 ]
 
 if settings.DEBUG:
