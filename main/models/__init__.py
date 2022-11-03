@@ -1,2 +1,2 @@
-from .auth import AuthDigit, PasswordResetToken  # noqa
+from .auth import AuthDigit, PasswordResetToken, LoginInvalid  # noqa
 from .user import User  # noqa

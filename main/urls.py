@@ -1,6 +1,5 @@
 from django.urls import path, include
 from django.conf import settings
-from django.contrib.auth.views import logout_then_login
 
 from rest_framework.routers import DefaultRouter, APIRootView
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify_jwt_token
@@ -20,6 +19,7 @@ urlpatterns = [
     path('api/auth/verify/', verify_jwt_token),
     path('api/auth/uuid/', views.AuthUUIDView.as_view()),
     path('api/auth/user/', obtain_jwt_token),
+    # path('api/auth/user/', views.AuthUserViewWithEmail.as_view()),
     path('api/user/', views.UserView.as_view()),
     path('api/user/password/', views.UserPasswordView.as_view()),
     path('api/password/', views.PasswordResetView.as_view()),

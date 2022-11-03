@@ -33,6 +33,7 @@ google-cloud-translate = "1.7.0"
 drf-nested-routers = "^0.93.3"
 pandas = "^1.5.1"
 attrs = "^22.1.0"
+django-ipware = "^4.0.2"
 
 [tool.poetry.dev-dependencies]
 httpie = "^2.4.0"

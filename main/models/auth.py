@@ -6,7 +6,9 @@ from django.db import models
 from django.utils import timezone
 from django.db.models.manager import BaseManager
 
-from main.constants import (DIGIT_AUTH_EXPIRED_MINUTES, ConstantProvider)
+from main.constants import (DIGIT_AUTH_EXPIRED_MINUTES, LOGIN_INVALID_MINUTES,
+                            LOGIN_INVALID_COUNT, LOGIN_INVALID_MESSAGE,
+                            ConstantProvider)
 from main.env import CONFIRM_EMAIL
 
 from ._base import WithExpiredQuerySet
@@ -83,3 +85,44 @@ class PasswordResetToken(models.Model):
         else:
             token = cls.objects.create(user=user)
         return token
+
+
+class LoginInvalid(models.Model):
+    address = models.CharField(max_length=15)
+    count = models.IntegerField(default=1)
+
+    denied_at = models.DateTimeField(default=timezone.now)
+
+    @classmethod
+    def invalid(cls, address):
+        obj = cls.objects.filter(
+            address=address,
+            denied_at__gt=timezone.now() -
+            datetime.timedelta(minutes=LOGIN_INVALID_MINUTES)).first()
+
+        if obj and obj.count == LOGIN_INVALID_COUNT:
+            return LOGIN_INVALID_MESSAGE
+
+        return None
+
+    @classmethod
+    def inc(cls, address):
+        obj = cls.objects.filter(
+            address=address,
+            denied_at__gt=timezone.now() -
+            datetime.timedelta(minutes=LOGIN_INVALID_MINUTES)).first()
+
+        if obj:
+            obj.count += 1
+            obj.save()
+            return
+
+        obj = cls.objects.filter(address=address).exclude(
+            count=LOGIN_INVALID_COUNT).first()
+
+        if obj:
+            obj.count = 1
+            obj.denied_at = timezone.now()
+            obj.save()
+        else:
+            cls.objects.create(address=address)

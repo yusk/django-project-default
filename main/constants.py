@@ -2,6 +2,10 @@ from .env import SERVICE_NAME
 
 DIGIT_AUTH_EXPIRED_MINUTES = 10
 
+LOGIN_INVALID_MINUTES = 5
+LOGIN_INVALID_COUNT = 5
+LOGIN_INVALID_MESSAGE = "短時間にログインの失敗が多数ありました。一時的にログインを制限しています。お手数ですが時間を空けて再度お試しください。"
+
 CONFIRM_EMAIL_SUBJECT = "{name} メールアドレス認証コード"
 CONFIRM_EMAIL_CONTENT = """{name} カスタマーサポートです。
 この度は、「{name}」へのご登録、誠にありがとうございます。
@@ -17,12 +21,6 @@ PASSWORD_RESET_EMAIL_CONTENT = """{name} カスタマーサポートです。
 {code}
 アプリから確認コードを入力して、パスワード変更を完了させてください。
 """
-
-IV_IN_REVIEW_MESSAGE = "現在支払い先情報を確認中です。お手数ですが数営業日お待ちください。"
-IV_VERIFIED_MESSAGE = "本人確認が完了しました。"
-IV_DENIED_MESSAGE = "本人確認が完了できませんでした。もう一度正しい書類を提出してください。"
-TO_DEPOSITED_MESSAGE = "出金依頼が正常に受理されました。銀行口座に指定額出金されました。"
-TO_CANCELED_MESSAGE = "出金依頼が受理されませんでした。口座情報などをご確認いただくか、運営にお問合せください。"
 
 
 class ConstantProvider:
