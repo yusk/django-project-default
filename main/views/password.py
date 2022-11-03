@@ -27,7 +27,6 @@ class PasswordResetEmailView(GenericAPIView):
                 data={'message': "登録されたユーザーが見つかりませんでした。"})
             serializer.is_valid(raise_exception=True)
             return Response(serializer.data, status=400)
-        auth = AuthDigit.update_or_create(user=user)
 
         try:
             auth = AuthDigit.update_or_create(user=user)

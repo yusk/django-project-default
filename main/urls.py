@@ -3,6 +3,9 @@ from django.conf import settings
 
 from rest_framework.routers import DefaultRouter, APIRootView
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify_jwt_token
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
 
 from . import views
 
@@ -23,31 +26,33 @@ urlpatterns = [
     # path('api/auth/user/', views.AuthUserViewWithEmail.as_view()),
     # path('api/confirm/digit/', views.ConfirmDigitView.as_view()),
     # path('api/confirm/digit/reset/', views.ConfirmDigitResetView.as_view()),
+    # path('api/password/', views.PasswordResetView.as_view()),
+    # path('api/password/email/', views.PasswordResetEmailView.as_view()),
+    # path('api/password/digit/', views.PasswordResetDigitView.as_view()),
     path('api/user/', views.UserView.as_view()),
     path('api/user/password/', views.UserPasswordView.as_view()),
-    path('api/password/', views.PasswordResetView.as_view()),
-    path('api/password/email/', views.PasswordResetEmailView.as_view()),
-    path('api/password/digit/', views.PasswordResetDigitView.as_view()),
 ]
 
 if settings.DEBUG:
-    from rest_framework import permissions
-    from drf_yasg.views import get_schema_view
-    from drf_yasg import openapi
-
-    schema_view = get_schema_view(
-        openapi.Info(
-            title="API Schema",
-            default_version='v1',
-            description="",
-        ),
-        public=True,
-        permission_classes=[permissions.AllowAny],
-    )
-
+    permission_classes = [permissions.AllowAny]
     urlpatterns.extend([
         path('api/register/dummy/', views.RegisterDummyUserView.as_view()),
-        path('schema/',
-             schema_view.with_ui('swagger', cache_timeout=0),
-             name='schema-swagger-ui'),
     ])
+else:
+    permission_classes = [permissions.IsAdminUser]
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="API Schema",
+        default_version='v1',
+        description="",
+    ),
+    public=True,
+    permission_classes=permission_classes,
+)
+
+urlpatterns.extend([
+    path('schema/',
+         schema_view.with_ui('swagger', cache_timeout=0),
+         name='schema-swagger-ui'),
+])
