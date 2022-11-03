@@ -13,8 +13,9 @@ from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from rest_framework_jwt.settings import api_settings
 
-from main.models._base import DeletePreviousFileMixin
 from main.env import EMAIL_HOST_USER
+
+from ._base import SoftDeletionModel, SoftDeletionQuerySet
 
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
@@ -24,8 +25,23 @@ def icon_file_path(instance, filename):
     return "icon/%s%s" % (timezone.now(), os.path.splitext(filename)[1])
 
 
+class UserQuerySet(SoftDeletionQuerySet):
+    def delete(self):
+        cnt = 0
+        for user in self:
+            cnt += user.delete()
+        return cnt
+
+    def revive(self):
+        cnt = 0
+        for user in self:
+            cnt += user.revive()
+        return cnt
+
+
 class UserManager(BaseUserManager):
     use_in_migrations = True
+    queryset_class = UserQuerySet
 
     def _create_user(self, email, password=None, **extra_fields):
         email = self.normalize_email(email)
@@ -59,7 +75,7 @@ class UserManager(BaseUserManager):
         return self._create_user(email, password, **extra_fields)
 
 
-class User(DeletePreviousFileMixin, PermissionsMixin, AbstractBaseUser):
+class User(SoftDeletionModel, PermissionsMixin, AbstractBaseUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     name = models.CharField(max_length=64, default='')
     email = models.EmailField(max_length=254,
@@ -78,6 +94,23 @@ class User(DeletePreviousFileMixin, PermissionsMixin, AbstractBaseUser):
     EMAIL_FIELD = 'email'
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name']
+
+    def delete(self):
+        if self.deleted_at:
+            return 0
+        self.email = f"{self.email}@{self.id}.deleted.com"
+        self.deleted_at = timezone.now()
+        self.save()
+        return 1
+
+    def revive(self):
+        suffix = f"@{self.id}.deleted.com"
+        if not self.email.endswith(suffix):
+            return 0
+        self.email = self.email[:-len(suffix)]
+        self.deleted_at = None
+        self.save()
+        return 1
 
     def save(self, *args, **kwargs):
         self.full_clean()
@@ -98,7 +131,7 @@ class User(DeletePreviousFileMixin, PermissionsMixin, AbstractBaseUser):
             content,
             from_email,
             [self.email],
-            fail_silently=False,
+            fail_silently=fail_silently,
         )
 
     def save_icon_with_base64(self, base64_str):
