@@ -2,7 +2,7 @@
 
 import django.core.validators
 from django.db import migrations, models
-import main.models.base
+import main.models._base
 import main.models.user
 import uuid
 
@@ -35,7 +35,7 @@ class Migration(migrations.Migration):
             options={
                 'abstract': False,
             },
-            bases=(main.models.base.DeletePreviousFileMixin, models.Model),
+            bases=(main.models._base.DeletePreviousFileMixin, models.Model),
             managers=[
                 ('objects', main.models.user.UserManager()),
             ],

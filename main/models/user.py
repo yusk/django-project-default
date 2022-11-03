@@ -12,7 +12,7 @@ from django.core.validators import EmailValidator
 from django.core.mail import send_mail
 from rest_framework_jwt.settings import api_settings
 
-from main.models.base import DeletePreviousFileMixin
+from main.models._base import DeletePreviousFileMixin
 from main.env import EMAIL_HOST_USER
 
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
@@ -60,7 +60,7 @@ class UserManager(BaseUserManager):
 
 class User(DeletePreviousFileMixin, PermissionsMixin, AbstractBaseUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
-    name = models.CharField(max_length=64, default='guest user')
+    name = models.CharField(max_length=64, default='')
     email = models.EmailField(max_length=254,
                               unique=True,
                               validators=[EmailValidator],
