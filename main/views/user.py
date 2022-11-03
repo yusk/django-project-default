@@ -44,7 +44,9 @@ class UserView(GenericAPIView):
         return Response(serializer.data)
 
     def put(self, request):
-        serializer = self.get_serializer(request.user, data=request.data)
+        serializer = self.get_serializer(request.user,
+                                         data=request.data,
+                                         base64_required=False)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
@@ -57,7 +59,7 @@ class UserView(GenericAPIView):
 
         user = self.request.user
         if not user.check_password(serializer.validated_data["password"]):
-            return Response({"passowrd": "password not matched"})
+            return Response({"password": "password not matched"})
 
         user.delete()
         return Response(None, 204)
@@ -75,7 +77,7 @@ class UserPasswordView(GenericAPIView):
         user = self.request.user
 
         if not user.check_password(serializer.validated_data["password"]):
-            return Response({"passowrd": "password not matched"})
+            return Response({"password": "password not matched"})
 
         user.set_password(serializer.validated_data["new_password"])
         user.save()

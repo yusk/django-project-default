@@ -1,6 +1,7 @@
 import os
 import uuid
 import base64
+import io
 
 from django.db import models
 from django.conf import settings
@@ -91,13 +92,8 @@ class User(DeletePreviousFileMixin, PermissionsMixin, AbstractBaseUser):
         )
 
     def save_icon_with_base64(self, base64_str):
-        tmp_path = os.path.join(settings.STATIC_ROOT,
-                                "%s.jpg" % timezone.now())
-        with open(tmp_path, 'wb') as f:
-            f.write(base64.b64decode(base64_str.encode()))
-        with open(tmp_path, 'rb') as f:
-            self.icon.save(tmp_path, f)
-        os.remove(tmp_path)
+        img = io.BytesIO(base64.b64decode(base64_str.encode()))
+        self.icon.save("icon.jpg", img)
 
     def get_jwt(self):
         payload = jwt_payload_handler(self)
