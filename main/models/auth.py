@@ -6,11 +6,8 @@ from django.db import models
 from django.utils import timezone
 from django.db.models.manager import BaseManager
 
-from main.constants import (DIGIT_AUTH_EXPIRED_MINUTES, CONFIRM_EMAIL_SUBJECT,
-                            CONFIRM_EMAIL_CONTENT,
-                            PASSWORD_RESET_EMAIL_SUBJECT,
-                            PASSWORD_RESET_EMAIL_CONTENT)
-from main.env import CONFIRM_EMAIL, SERVICE_NAME, SERVICE_COPY, COMPANY_NAME
+from main.constants import (DIGIT_AUTH_EXPIRED_MINUTES, ConstantProvider)
+from main.env import CONFIRM_EMAIL
 
 from ._base import WithExpiredQuerySet
 
@@ -41,23 +38,15 @@ class AuthDigit(models.Model):
         self.save()
 
     def send_confirm_email(self):
-        subject = CONFIRM_EMAIL_SUBJECT.format(name=SERVICE_NAME)
-        content = CONFIRM_EMAIL_CONTENT.format(company=COMPANY_NAME,
-                                               copy=SERVICE_COPY,
-                                               name=SERVICE_NAME,
-                                               code=self.code,
-                                               email=CONFIRM_EMAIL)
+        subject = ConstantProvider.confirm_email_subject()
+        content = ConstantProvider.confirm_email_content(self.code)
         self.user.send_email(subject=subject,
                              content=content,
                              from_email=CONFIRM_EMAIL)
 
     def send_password_reset_email(self):
-        subject = PASSWORD_RESET_EMAIL_SUBJECT.format(name=SERVICE_NAME)
-        content = PASSWORD_RESET_EMAIL_CONTENT.format(company=COMPANY_NAME,
-                                                      copy=SERVICE_COPY,
-                                                      name=SERVICE_NAME,
-                                                      code=self.code,
-                                                      email=CONFIRM_EMAIL)
+        subject = ConstantProvider.password_reset_email_subject()
+        content = ConstantProvider.password_reset_email_content(self.code)
         self.user.send_email(subject=subject,
                              content=content,
                              from_email=CONFIRM_EMAIL)
