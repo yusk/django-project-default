@@ -9,6 +9,7 @@ from django.utils import timezone
 from django.contrib.auth.base_user import (AbstractBaseUser, BaseUserManager)
 from django.contrib.auth.models import PermissionsMixin
 from django.core.validators import EmailValidator
+from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from rest_framework_jwt.settings import api_settings
 
@@ -77,6 +78,15 @@ class User(DeletePreviousFileMixin, PermissionsMixin, AbstractBaseUser):
     EMAIL_FIELD = 'email'
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name']
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)
+
+    def clean(self, *args, **kwargs):
+        if self.is_superuser and not self.is_staff:
+            raise ValidationError({"is_staff": "スーパーユーザーはスタッフでなければなりません。"})
+        super().clean(*args, **kwargs)
 
     def send_mail(self,
                   subject,
