@@ -136,7 +136,7 @@ class User(SoftDeletionModel, PermissionsMixin, AbstractBaseUser):
 
     def save_icon_with_base64(self, base64_str):
         img = io.BytesIO(base64.b64decode(base64_str.encode()))
-        self.icon.save("icon.jpg", img)
+        self.icon.save("icon.png", img)
 
     def get_jwt(self):
         payload = jwt_payload_handler(self)

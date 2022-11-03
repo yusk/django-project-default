@@ -57,3 +57,8 @@ class DeletePreviousFileMixin:
     @delete_previous_file
     def delete(self, *args, **kwargs):
         return super().delete(*args, **kwargs)
+
+
+class WithExpiredQuerySet(models.QuerySet):
+    def expired(self, now=timezone.now()):
+        return self.filter(expired_at__gt=now).distinct()

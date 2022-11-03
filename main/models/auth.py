@@ -4,12 +4,15 @@ import secrets
 
 from django.db import models
 from django.utils import timezone
+from django.db.models.manager import BaseManager
 
 from main.constants import (DIGIT_AUTH_EXPIRED_MINUTES, CONFIRM_EMAIL_SUBJECT,
                             CONFIRM_EMAIL_CONTENT,
                             PASSWORD_RESET_EMAIL_SUBJECT,
                             PASSWORD_RESET_EMAIL_CONTENT)
 from main.env import CONFIRM_EMAIL, SERVICE_NAME, SERVICE_COPY, COMPANY_NAME
+
+from ._base import WithExpiredQuerySet
 
 
 def random_digit_code():
@@ -26,6 +29,8 @@ class AuthDigit(models.Model):
     user = models.ForeignKey("User", on_delete=models.CASCADE)
     code = models.CharField(max_length=6, default=random_digit_code)
     expired_at = models.DateTimeField(default=gen_expired_at)
+
+    objects = BaseManager.from_queryset(WithExpiredQuerySet)()
 
     def is_expired(self):
         return timezone.now() > self.expired_at
@@ -73,6 +78,8 @@ class PasswordResetToken(models.Model):
     user = models.ForeignKey("User", on_delete=models.CASCADE)
     token = models.CharField(max_length=32, default=secrets.token_urlsafe)
     expired_at = models.DateTimeField(default=gen_expired_at)
+
+    objects = BaseManager.from_queryset(WithExpiredQuerySet)()
 
     def is_expired(self):
         return timezone.now() > self.expired_at
