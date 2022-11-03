@@ -15,6 +15,8 @@ import sys
 import datetime
 from dotenv import load_dotenv
 
+from main.env import CORS_ORIGIN_WHITELIST  # noqa
+
 sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', buffering=1)
 sys.stderr = os.fdopen(sys.stderr.fileno(), 'w', buffering=1)
 sys.stdin = os.fdopen(sys.stdin.fileno(), 'r', buffering=1)

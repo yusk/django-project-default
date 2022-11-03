@@ -1,6 +1,5 @@
 from .base import *  # noqa
 
-from main.env import CORS_ORIGIN_WHITELIST  # noqa
 from main.env import (DB_SECRET_KEY, PRODUCTION_HOST, DB_NAME, DB_USER,
                       DB_PASSWORD, DB_HOST, DB_PORT)
 

@@ -9,9 +9,9 @@ DB_PASSWORD = os.environ.get('DB_PASSWORD')
 DB_HOST = os.environ.get('DB_HOST', 'localhost')
 DB_PORT = os.environ.get('DB_PORT', 3306)
 
-CORS_ORIGIN_WHITELIST = set(
-    os.environ.get('CORS_ORIGIN_WHITELIST',
-                   'http://localhost:3000,http://127.0.0.1:3000').split(','))
+CORS_ORIGIN_WHITELIST = os.environ.get(
+    'CORS_ORIGIN_WHITELIST',
+    'http://localhost:3000,http://127.0.0.1:3000').split(',')
 
 SLACK_WEBHOOK_URL = os.environ.get('SLACK_WEBHOOK_URL')
 
