@@ -21,6 +21,8 @@ urlpatterns = [
     path('api/auth/uuid/', views.AuthUUIDView.as_view()),
     path('api/auth/user/', obtain_jwt_token),
     # path('api/auth/user/', views.AuthUserViewWithEmail.as_view()),
+    # path('api/confirm/digit/', views.ConfirmDigitView.as_view()),
+    # path('api/confirm/digit/reset/', views.ConfirmDigitResetView.as_view()),
     path('api/user/', views.UserView.as_view()),
     path('api/user/password/', views.UserPasswordView.as_view()),
     path('api/password/', views.PasswordResetView.as_view()),

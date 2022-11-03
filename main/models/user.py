@@ -86,6 +86,7 @@ class User(SoftDeletionModel, PermissionsMixin, AbstractBaseUser):
 
     icon = models.ImageField(upload_to=icon_file_path, null=True, blank=True)
     device_uuid = models.UUIDField(default=uuid.uuid4)
+    email_confirmed = models.BooleanField(default=False)
 
     is_staff = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
