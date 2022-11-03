@@ -58,3 +58,9 @@ class TweetTagRelation(models.Model):
     tag = models.ForeignKey("tag.Tag", on_delete=models.CASCADE)
 
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=["tweet", "tag"],
+                                    name="uq_tweet_tag"),
+        ]
