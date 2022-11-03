@@ -16,6 +16,7 @@ router.register('users', views.UserViewSet, basename='user')
 app_name = 'main'
 urlpatterns = [
     path('api/', include(router.urls)),
+    path('api/status/', views.StatusView.as_view()),
     path('api/register/uuid/', views.RegisterUUIDView.as_view()),
     path('api/register/user/', views.RegisterUserView.as_view()),
     # path('api/register/user/', views.RegisterUserViewWithEmail.as_view()),
