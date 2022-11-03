@@ -12,6 +12,7 @@ from . import views
 router = DefaultRouter()
 router.APIRootView = APIRootView
 router.register('users', views.UserViewSet, basename='user')
+router.register('images', views.ImageViewSet, basename='image')
 
 app_name = 'main'
 urlpatterns = [
