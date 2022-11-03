@@ -6,10 +6,12 @@ from django.db import models
 from django.utils import timezone
 from django.db.models.manager import BaseManager
 
-from main.constants import (DIGIT_AUTH_EXPIRED_MINUTES, LOGIN_INVALID_MINUTES,
+from main.constants import (DIGIT_AUTH_EXPIRED_MINUTES, EMAIL_LIMIT_MINUTES,
+                            EMAIL_LIMIT_MESSAGE, LOGIN_INVALID_MINUTES,
                             LOGIN_INVALID_COUNT, LOGIN_INVALID_MESSAGE,
                             ConstantProvider)
 from main.env import CONFIRM_EMAIL
+from main.errors import TooManyEmailRequestError
 
 from ._base import WithExpiredQuerySet
 
@@ -56,12 +58,16 @@ class AuthDigit(models.Model):
     @classmethod
     def update_or_create(cls, user):
         auth = cls.objects.filter(user=user).first()
-        if auth:
+        if auth is None:
+            auth = cls.objects.create(user=user)
+        elif auth.updated_at <= timezone.now() + datetime.timedelta(
+                minutes=EMAIL_LIMIT_MINUTES):
+            raise TooManyEmailRequestError(message=EMAIL_LIMIT_MESSAGE)
+        else:
             auth.code = random_digit_code()
             auth.expired_at = gen_expired_at()
             auth.save()
-        else:
-            auth = cls.objects.create(user=user)
+
         return auth
 
 

@@ -1,3 +1,5 @@
+import traceback
+
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 from django.utils.decorators import method_decorator
@@ -5,6 +7,7 @@ from drf_yasg.utils import swagger_auto_schema
 
 from main.models import AuthDigit, User, PasswordResetToken
 from main.serializers import DigitSerializer, MessageSerializer, EmailSerializer, TokenSerializer, PasswordResetSerializer
+from main.errors import TooManyEmailRequestError
 
 
 class PasswordResetEmailView(GenericAPIView):
@@ -25,7 +28,23 @@ class PasswordResetEmailView(GenericAPIView):
             serializer.is_valid(raise_exception=True)
             return Response(serializer.data, status=400)
         auth = AuthDigit.update_or_create(user=user)
-        auth.send_password_reset_email()
+
+        try:
+            auth = AuthDigit.update_or_create(user=user)
+        except TooManyEmailRequestError as e:
+            serializer = MessageSerializer(data={'message': e.message})
+            serializer.is_valid(raise_exception=True)
+            return Response(serializer.data, status=400)
+        try:
+            auth.send_password_reset_email()
+        except Exception:
+            traceback.print_exc()
+            auth.delete()
+            message = {
+                'message':
+                'メールの送信に失敗しました。少しお待ちいただいてからもう一度送っていただくか、サービス運営者にお問合せください。'
+            }
+            return Response(message, status=500)
 
         serializer = MessageSerializer(
             data={

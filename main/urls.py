@@ -15,6 +15,7 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('api/register/uuid/', views.RegisterUUIDView.as_view()),
     path('api/register/user/', views.RegisterUserView.as_view()),
+    # path('api/register/user/', views.RegisterUserViewWithEmail.as_view()),
     path('api/auth/refresh/', refresh_jwt_token),
     path('api/auth/verify/', verify_jwt_token),
     path('api/auth/uuid/', views.AuthUUIDView.as_view()),
