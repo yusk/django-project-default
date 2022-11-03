@@ -1,7 +1,16 @@
 from django.db import models
 from django.db.models import Max
+from django.core.exceptions import ValidationError
 
 from tag.models import Tag
+
+
+def validate_empty(value):
+    if len(str(value)) == 0:
+        raise ValidationError(
+            ('空テキストは許可されていません: %(value)s'),
+            params={'value': value},
+        )
 
 
 class Tweet(models.Model):
@@ -11,7 +20,7 @@ class Tweet(models.Model):
         PRIVATE = 2, '非公開'
 
     user = models.ForeignKey("main.User", on_delete=models.CASCADE)
-    text = models.TextField()
+    text = models.TextField(validators=[validate_empty])
 
     status = models.IntegerField(choices=Status.choices, default=Status.DRAFT)
     tags = models.ManyToManyField("tag.Tag",
