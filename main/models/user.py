@@ -115,7 +115,7 @@ class User(SoftDeletionModel, PermissionsMixin, AbstractBaseUser):
         return 1
 
     def save(self, *args, **kwargs):
-        self.full_clean()
+        # self.full_clean()
         return super().save(*args, **kwargs)
 
     def clean(self, *args, **kwargs):

@@ -1,11 +1,13 @@
 from django.contrib import admin
 from django.db.models import Model
 from django.contrib.admin.sites import AlreadyRegistered
+from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 from django.utils.safestring import mark_safe
+from django.core.exceptions import PermissionDenied
 
 from main import models
 from main.models import User, Image
-from main.utils import register_admin, get_field_names, get_many_to_many_names, export_as_json
+from main.utils import register_admin, get_field_names, get_many_to_many_names, get_editable_field_names, export_as_json
 
 admin.site.add_action(export_as_json, 'export_as_json')
 
@@ -20,18 +22,43 @@ class ImageInline(admin.StackedInline):
     extra = 1
 
 
-class UserAdmin(admin.ModelAdmin):
+class UserAdmin(DjangoUserAdmin):
     inlines = [ImageInline]
+    list_display = get_field_names(User)
+    list_filter = (
+        'deleted_at',
+        'is_staff',
+        'is_superuser',
+    )
     search_fields = ['id', 'name', 'email']
-    list_filter = ('is_staff', 'is_superuser')
     ordering = ['-created_at']
     date_hierarchy = 'created_at'
+    fieldsets = ((None, {'fields': tuple(get_editable_field_names(User))}), )
+    add_fieldsets = ((None, {
+        'classes': ('wide', ),
+        'fields': ('name', 'email', 'password1', 'password2'),
+    }), )
     filter_horizontal = get_many_to_many_names(User)
 
     actions = ['make_superuser']
 
+    def _add_view(self, request, form_url='', extra_context=None):
+        # add permission で実行できるように変更
+        if not self.has_add_permission(request):
+            raise PermissionDenied
+        if extra_context is None:
+            extra_context = {}
+        username_field = self.model._meta.get_field(self.model.USERNAME_FIELD)
+        defaults = {
+            'auto_populated_fields': (),
+            'username_help_text': username_field.help_text,
+        }
+        extra_context.update(defaults)
+        return super(DjangoUserAdmin, self).add_view(request, form_url,
+                                                     extra_context)
+
     def get_list_display(self, request):
-        list_display = get_field_names(User)
+        list_display = super().get_list_display(request)
         list_display.append("image_show")
         return list_display
 
