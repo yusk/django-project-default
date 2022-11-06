@@ -37,6 +37,7 @@ django-ipware = "^4.0.2"
 boto3 = "^1.26.3"
 django-ses = "^3.2.2"
 django-storages = "^1.13.1"
+bleach = "^5.0.1"
 
 [tool.poetry.dev-dependencies]
 httpie = "^2.4.0"
