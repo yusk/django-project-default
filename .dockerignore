@@ -1,2 +1,13 @@
-.vscode
-.venv
+**/.vscode
+**/.venv
+**/__pycache__
+static/**
+media/**
+log/**
+local
+.env
+.envrc
+db.sqlite3
+Dockerfile*
+docker-compose*
+sample_base64.txt
