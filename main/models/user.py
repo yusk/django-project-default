@@ -77,7 +77,7 @@ class UserManager(SoftDeletionManager, BaseUserManager):
 
 class User(SoftDeletionModel, PermissionsMixin, AbstractBaseUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
-    name = models.CharField(max_length=64, default='')
+    name = models.CharField(max_length=64, default='', blank=True)
     email = models.EmailField(max_length=254,
                               unique=True,
                               validators=[EmailValidator],

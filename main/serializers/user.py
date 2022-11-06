@@ -9,7 +9,11 @@ from .base import MixInImageBase64Upload
 class UserSerializer(MixInImageBase64Upload, serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'name', 'icon', )
+        fields = (
+            'id',
+            'name',
+            'icon',
+        )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -23,9 +27,10 @@ class UserSignUpSerializer(serializers.Serializer):
 
     def validate(self, attrs):
         if attrs["password"] != attrs["password_confirm"]:
-            raise ValidationError({"password": "password is need to be same to password_confirm."})
+            raise ValidationError(
+                {"password_confirm": "パスワード確認がパスワードと一致していません。"})
         if User.objects.filter(email=attrs["email"]).count() > 0:
-            raise ValidationError({"email": "This email has been already registered."})
+            raise ValidationError({"email": "このメールアドレスは既に登録されています。"})
         return attrs
 
 
@@ -36,9 +41,13 @@ class UserPasswordSerializer(serializers.Serializer):
 
     def validate(self, attrs):
         if attrs["new_password"] != attrs["new_password_confirm"]:
-            raise ValidationError({"new_password": "new_password is need to be same to new_password_confirm."})
+            raise ValidationError(
+                {"new_password_confirm": "パスワード確認がパスワードと一致していません。"})
         if attrs["password"] == attrs["new_password"]:
-            raise ValidationError({"new_password": "new_password is need to be different to password."})
+            raise ValidationError({
+                "new_password":
+                "新しいパスワードは現在のパスワードと異なってなければなりません"
+            })
         return attrs
 
 
