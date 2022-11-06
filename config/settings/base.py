@@ -14,6 +14,9 @@ import os
 import sys
 import datetime
 from dotenv import load_dotenv
+import firebase_admin
+from firebase_admin.credentials import Certificate
+import json
 
 from main.env import CORS_ORIGIN_WHITELIST  # noqa
 
@@ -25,6 +28,14 @@ sys.stdin = os.fdopen(sys.stdin.fileno(), 'r', buffering=1)
 BASE_DIR = os.path.dirname(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 load_dotenv(os.path.join(BASE_DIR, '.env'))
+
+cred = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS_STR")
+if cred:
+    cred = json.loads(cred)
+    cred = Certificate(cert=cred)
+    firebase_admin.initialize_app(credential=cred)
+else:
+    firebase_admin.initialize_app()
 
 # Application definition
 INSTALLED_APPS = [
