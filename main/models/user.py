@@ -15,7 +15,7 @@ from rest_framework_jwt.settings import api_settings
 
 from main.env import EMAIL_HOST_USER
 
-from ._base import SoftDeletionModel, SoftDeletionQuerySet
+from ._base import SoftDeletionModel, SoftDeletionManager, SoftDeletionQuerySet
 
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
@@ -39,7 +39,7 @@ class UserQuerySet(SoftDeletionQuerySet):
         return cnt
 
 
-class UserManager(BaseUserManager):
+class UserManager(SoftDeletionManager, BaseUserManager):
     use_in_migrations = True
     queryset_class = UserQuerySet
 
@@ -99,13 +99,13 @@ class User(SoftDeletionModel, PermissionsMixin, AbstractBaseUser):
     def delete(self):
         if self.deleted_at:
             return 0
-        self.email = f"{self.email}@{self.id}.deleted.com"
+        self.email = f"{self.email}.{self.id}.deleted"
         self.deleted_at = timezone.now()
         self.save()
         return 1
 
     def revive(self):
-        suffix = f"@{self.id}.deleted.com"
+        suffix = f".{self.id}.deleted"
         if not self.email.endswith(suffix):
             return 0
         self.email = self.email[:-len(suffix)]
@@ -122,11 +122,11 @@ class User(SoftDeletionModel, PermissionsMixin, AbstractBaseUser):
             raise ValidationError({"is_staff": "スーパーユーザーはスタッフでなければなりません。"})
         super().clean(*args, **kwargs)
 
-    def send_mail(self,
-                  subject,
-                  content,
-                  from_email=EMAIL_HOST_USER,
-                  fail_silently=False):
+    def send_email(self,
+                   subject,
+                   content,
+                   from_email=EMAIL_HOST_USER,
+                   fail_silently=False):
         send_mail(
             subject,
             content,

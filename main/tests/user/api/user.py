@@ -24,8 +24,8 @@ class UserViewTest(TestCase):
         with mock.patch('django.utils.timezone.now') as mock_now:
             mock_now.return_value = self.mock_date
             self.user = User.objects.create_user(name='test_user',
-                                                 email='test@test.test',
-                                                 password='12345')
+                                                 email='test@test.com',
+                                                 password='password')
 
     def test_get_user(self):
         factory = RequestFactory()
@@ -86,3 +86,13 @@ class UserViewTest(TestCase):
         self.assertIsInstance(UUID(data["id"]), UUID)
         self.assertEquals(data["name"], "test_user")
         self.assertIsNotNone(data["icon"])
+
+    def test_delete_user(self):
+        factory = RequestFactory()
+        req = factory.delete("/api/user/", {"password": "password"},
+                             content_type="application/json")
+        force_authenticate(req, user=self.user)
+        view = UserView.as_view()
+        res = view(req)
+        self.assertEqual(res.status_code, 204)
+        self.assertFalse(User.objects.filter(id=self.user.id))

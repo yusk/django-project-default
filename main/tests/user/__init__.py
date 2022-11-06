@@ -1,1 +1,2 @@
-from .api import UserViewTest  # noqa
+from .api import *  # noqa
+from .model import UserModelTest  # noqa

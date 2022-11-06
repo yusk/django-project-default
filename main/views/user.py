@@ -1,7 +1,7 @@
 from django.utils.decorators import method_decorator
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
-from rest_framework.mixins import RetrieveModelMixin
+from rest_framework.mixins import RetrieveModelMixin, ListModelMixin
 from rest_framework.viewsets import GenericViewSet
 from django_filters import rest_framework as filters
 from drf_yasg.utils import swagger_auto_schema
@@ -59,7 +59,7 @@ class UserView(GenericAPIView):
 
         user = self.request.user
         if not user.check_password(serializer.validated_data["password"]):
-            return Response({"password": "password not matched"})
+            return Response({"password": "password not matched"}, status=400)
 
         user.delete()
         return Response(None, 204)
@@ -77,7 +77,7 @@ class UserPasswordView(GenericAPIView):
         user = self.request.user
 
         if not user.check_password(serializer.validated_data["password"]):
-            return Response({"password": "password not matched"})
+            return Response({"password": "password not matched"}, status=400)
 
         user.set_password(serializer.validated_data["new_password"])
         user.save()
@@ -85,7 +85,7 @@ class UserPasswordView(GenericAPIView):
         return Response({"token": gen_jwt(user)})
 
 
-class UserViewSet(RetrieveModelMixin, GenericViewSet):
+class UserViewSet(RetrieveModelMixin, ListModelMixin, GenericViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.all()
     filter_class = UserFilter
