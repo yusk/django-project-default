@@ -90,6 +90,7 @@ class User(SoftDeletionModel, PermissionsMixin, AbstractBaseUser):
 
     is_staff = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    updated_at = models.DateTimeField(auto_now=True, db_index=True)
 
     objects = UserManager()
     EMAIL_FIELD = 'email'
