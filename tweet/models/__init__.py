@@ -1,1 +1,1 @@
-from .tweet import Tweet  # noqa
+from .tweet import Tweet, TweetTagRelation  # noqa

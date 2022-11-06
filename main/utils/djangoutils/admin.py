@@ -2,12 +2,15 @@ from django.contrib import admin
 from django.core import serializers
 from django.http import HttpResponse
 
-from .funcs import get_field_names
+from .funcs import get_field_names, get_many_to_many_names
 
 
 def create_admin(cls):
-    return type("%sAdmin" % cls.__name__, (admin.ModelAdmin, ),
-                {"list_display": get_field_names(cls)})
+    return type(
+        "%sAdmin" % cls.__name__, (admin.ModelAdmin, ), {
+            "list_display": get_field_names(cls),
+            "filter_horizontal": get_many_to_many_names(cls)
+        })
 
 
 def register_admin(cls):

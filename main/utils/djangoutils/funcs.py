@@ -7,6 +7,15 @@ def get_field_names(cls):
     return [f.name for f in cls._meta.fields]
 
 
+def get_many_to_many_names(cls):
+    return [f.name for f in cls._meta.many_to_many]
+
+
+def get_editable_field_names(cls):
+    return [f.name for f in cls._meta.fields if f.editable
+            ] + [f.name for f in cls._meta.many_to_many]
+
+
 def model_to_dict(obj):
     res = {}
     for field in obj._meta.fields:
