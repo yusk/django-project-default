@@ -1,8 +1,20 @@
+import os
+
 from django.db import models
 from django.db.models import Max
 from django.core.exceptions import ValidationError
+from django.utils import timezone
+from django.conf import settings
+
+from config.storage import PrivateMediaStorage
 
 from tag.models import Tag
+
+
+def storage():
+    if not settings.DEBUG:
+        return PrivateMediaStorage()
+    return None
 
 
 def validate_empty(value):
@@ -13,6 +25,12 @@ def validate_empty(value):
         )
 
 
+def tweet_file_path(instance, filename):
+    ext = os.path.splitext(filename)[1]
+    name = timezone.now().strftime('%Y%m%d%H%M%S%f')
+    return f"identity/{name}{ext}"
+
+
 class Tweet(models.Model):
     class Status(models.TextChoices):
         PUBLISHED = 0, '公開'
@@ -21,6 +39,10 @@ class Tweet(models.Model):
 
     user = models.ForeignKey("main.User", on_delete=models.CASCADE)
     text = models.TextField(validators=[validate_empty])
+    image = models.ImageField(upload_to=tweet_file_path,
+                              storage=storage(),
+                              null=True,
+                              blank=True)
 
     status = models.IntegerField(choices=Status.choices, default=Status.DRAFT)
     tags = models.ManyToManyField("tag.Tag",
