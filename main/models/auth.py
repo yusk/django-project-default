@@ -60,9 +60,10 @@ class AuthDigit(models.Model):
         auth = cls.objects.filter(user=user).first()
         if auth is None:
             auth = cls.objects.create(user=user)
-        elif auth.updated_at <= timezone.now() + datetime.timedelta(
+        elif timezone.now() <= auth.updated_at + datetime.timedelta(
                 minutes=EMAIL_LIMIT_MINUTES):
-            raise TooManyEmailRequestError(message=EMAIL_LIMIT_MESSAGE)
+            message = "メールは短時間に連続して送ることができません。お手数ですが時間を空けてからお試しください。"
+            raise TooManyEmailRequestError(message=message)
         else:
             auth.code = random_digit_code()
             auth.expired_at = gen_expired_at()

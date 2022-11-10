@@ -4,8 +4,10 @@ from datetime import datetime
 from django.test import TestCase
 from django.test.client import RequestFactory
 from django.utils import timezone
+from main.constants import LOGIN_INVALID_COUNT, LOGIN_INVALID_MESSAGE
 
 from main.models import User
+from main.models.auth import LoginInvalid
 from main.views import AuthUUIDView, AuthUserViewWithEmail
 
 
@@ -66,7 +68,37 @@ class AuthUserViewWithEmailTest(TestCase):
         res = view(req)
         self.assertEqual(res.status_code, 200)
 
-    def test_post_email_confirmed_error(self):
+    @mock.patch("main.views.auth.get_client_ip")
+    def test_post__login_invalid_count_error(self, mock):
+        mock.return_value = ["1234567890", None]
+        LoginInvalid.objects.create(address="1234567890",
+                                    count=LOGIN_INVALID_COUNT)
+        factory = RequestFactory()
+        req = factory.post("/api/auth/user/", {
+            "email": "user1@test.test",
+            "password": "user1"
+        },
+                           content_type="application/json")
+        view = AuthUserViewWithEmail.as_view()
+        res = view(req)
+        data = res.data
+        self.assertEqual(res.status_code, 400)
+        self.assertEqual(str(data["message"]), LOGIN_INVALID_MESSAGE)
+
+    def test_post__validation_error(self):
+        factory = RequestFactory()
+        req = factory.post("/api/auth/user/", {
+            "email": "user1@test.test",
+            "password": "user2"
+        },
+                           content_type="application/json")
+        view = AuthUserViewWithEmail.as_view()
+        res = view(req)
+        data = res.data
+        self.assertEqual(res.status_code, 400)
+        self.assertEqual(LoginInvalid.objects.all().count(), 1)
+
+    def test_post__email_confirmed_error(self):
         self.user.email_confirmed = False
         self.user.save()
         factory = RequestFactory()

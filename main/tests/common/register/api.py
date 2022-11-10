@@ -7,6 +7,7 @@ from django.core import mail
 from django.utils import timezone
 
 from main.models import User
+from main.models.auth import AuthDigit
 from main.views import RegisterDummyUserView, RegisterUUIDView, RegisterUserViewWithEmail
 
 
@@ -145,3 +146,44 @@ class RegisterUserViewWithEmailTest(TestCase):
         data = res.data
         self.assertIn("email", data)
         self.assertEqual(str(data["email"][0]), "このメールアドレスは既に登録されています。")
+
+    def test_post__too_many_email_request_error(self):
+        AuthDigit.objects.create(
+            user=User(id="test", email="user@test.test", password="testpass"))
+        factory = RequestFactory()
+        req = factory.post("/api/register/user/", {
+            "id": "test",
+            "email": "user@test.test",
+            "password": "testpass",
+            "password_confirm": "testpass"
+        },
+                           content_type="application/json")
+        view = RegisterUserViewWithEmail.as_view()
+        res = view(req)
+        data = res.data
+        self.assertEqual(res.status_code, 400)
+        self.assertEqual(str(data["message"]),
+                         "メールは短時間に連続して送ることができません。お手数ですが時間を空けてからお試しください。")
+        self.assertEqual(
+            User.objects.filter(email="user@test.test").count(), 0)
+
+    @mock.patch("main.models.auth.AuthDigit.send_confirm_email")
+    def test_post__send_email_error(self, mock):
+        mock.side_effect = Exception("テスト")
+        factory = RequestFactory()
+        req = factory.post("/api/register/user/", {
+            "id": "test",
+            "email": "user@test.test",
+            "password": "testpass",
+            "password_confirm": "testpass"
+        },
+                           content_type="application/json")
+        view = RegisterUserViewWithEmail.as_view()
+        res = view(req)
+        data = res.data
+        self.assertEqual(res.status_code, 500)
+        self.assertEqual(
+            str(data["message"]),
+            "メールの送信に失敗しました。少しお待ちいただいてからもう一度送っていただくか、サービス運営者にお問合せください。")
+        self.assertEqual(
+            User.objects.filter(email="user@test.test").count(), 0)
